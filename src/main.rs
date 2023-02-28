@@ -2,6 +2,7 @@ mod keywords;
 use keywords::keywords;
 use std::{fs::read_to_string, io::Error};
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Token {
     value_type: String,
@@ -29,16 +30,24 @@ fn main() -> Result<(), Error> {
                 //Make a string to put the token value into
                 let mut token_value = "".to_string();
                 //Iterate until the entire token is built
-                while chars[pos + 1] != '"' && pos < file.len() {
-                    pos += 1;
-                    token_value.push(chars[pos]);
-                }
                 pos += 1;
+                while chars[pos] != '"' && pos < file.len() {
+                    token_value.push(chars[pos]);
+                    pos += 1;
+                }
                 tokens.push(Token {
                     value_type: "string".to_string(),
                     value: token_value,
                 });
             }
+            '(' => tokens.push(Token {
+                value_type: "paren_open".to_string(),
+                value: "(".to_string(),
+            }),
+            ')' => tokens.push(Token {
+                value_type: "paren_close".to_string(),
+                value: ")".to_string(),
+            }),
             _ => {
                 if viable_chars.contains(&chars[pos]) {
                     //Make a string to put the token value into
@@ -48,6 +57,7 @@ fn main() -> Result<(), Error> {
                         token_value.push(chars[pos]);
                         pos += 1;
                     }
+                    pos -= 1;
                     tokens.push(Token {
                         value_type: if keywords.contains(&token_value) {
                             "keyword".to_string()
