@@ -3,7 +3,7 @@ macro print message {
 	mov rax, 1
 	xor rdi, rdi
 	movzx rdx, [message]
-	mov rsi, message+1
+	mov rsi, message + 1
 	syscall
 }
 segment readable writeable
