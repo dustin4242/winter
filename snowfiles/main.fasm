@@ -3,14 +3,14 @@ macro print message {
 	mov rax, 1
 	xor rdi, rdi
 	movzx rdx, [message]
-	mov [message],0
-	mov rsi, message
+	mov rsi, message+1
 	syscall
 }
 segment readable writeable
-msg db 12,"Hello World"
+msg db 11,"Hello World"
 segment readable executable
 entry $
+print(msg)
 print(msg)
 mov rax, 60
 mov rdi, 0

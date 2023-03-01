@@ -23,7 +23,7 @@ pub fn parser(mut tokens: Vec<Token>) -> String {
                 "let" => {
                     let name = &tokens[pos + 1].value;
                     let value = &tokens[pos + 2].value;
-                    let value_size = value.len() + 1;
+                    let value_size = value.len();
                     asm_file[1].push(format!("{name} db {value_size},\"{value}\""));
                     pos += 2
                 }
