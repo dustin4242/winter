@@ -1,5 +1,4 @@
 format ELF64 executable
-
 macro print message {
 	mov rax, 1
 	xor rdi, rdi
@@ -8,18 +7,11 @@ macro print message {
 	mov rsi, message
 	syscall
 }
-
-macro exit code {
-	mov rax, 60
-	mov rdi, code
-	syscall
-}
-
 segment readable writeable
-msg db 13, "Hello World", 10
-
+msg db 12,"Hello World"
 segment readable executable
 entry $
-
-print msg
-exit 0
+print(msg)
+mov rax, 60
+mov rdi, 0
+syscall

@@ -1,0 +1,8 @@
+exportasm "macro print message {
+	mov rax, 1
+	xor rdi, rdi
+	movzx rdx, [message]
+	mov [message],0
+	mov rsi, message
+	syscall
+}"

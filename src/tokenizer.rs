@@ -1,10 +1,10 @@
 use crate::keywords::keywords;
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
-    value_type: String,
-    value: String,
+    pub value_type: String,
+    pub value: String,
 }
 
 pub fn tokenizer(file: String) -> Vec<Token> {
@@ -28,7 +28,7 @@ pub fn tokenizer(file: String) -> Vec<Token> {
                 let mut token_value = "".to_string();
                 //Iterate until the entire token is built
                 pos += 1;
-                while chars[pos] != '"' && pos < file.len() {
+                while pos < file.len() && chars[pos] != '"' {
                     token_value.push(chars[pos]);
                     pos += 1;
                 }
@@ -50,7 +50,7 @@ pub fn tokenizer(file: String) -> Vec<Token> {
                     //Make a string to put the token value into
                     let mut token_value = "".to_string();
                     //*Iterate until the entire token is built
-                    while viable_chars.contains(&chars[pos]) && pos < chars.len() {
+                    while pos < chars.len() && viable_chars.contains(&chars[pos]) {
                         token_value.push(chars[pos]);
                         pos += 1;
                     }
