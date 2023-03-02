@@ -1,7 +1,7 @@
 use crate::tokenizer::Token;
 use std::{collections::HashMap, io::Error};
 
-pub fn wolf_hunt(tokens: &Vec<Token>) -> Result<(), Error> {
+pub fn artemis(tokens: &Vec<Token>) -> Result<(), Error> {
     let mut variables: HashMap<String, String> = HashMap::new();
     let mut functions: HashMap<String, Vec<String>> = HashMap::new();
     let mut pos = 0;
