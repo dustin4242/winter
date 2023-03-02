@@ -41,6 +41,7 @@ pub fn parser(tokens: &mut Vec<Token>) -> String {
                 let func_name = &tokens[pos].value;
                 let func_arguments = &tokens[pos + 2].value;
                 asm_file[2].push(format!("{func_name}({func_arguments})"));
+                pos += 2
             }
             _ => (),
         }

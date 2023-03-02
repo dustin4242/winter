@@ -27,7 +27,7 @@ fn keyword_handler(
             if pos + 1 > tokens.len() {
                 panic!("No snow file specified to use");
             }
-            if tokens[pos + 1].value_type != "word".to_string() {
+            if tokens[pos + 1].value_type != "string".to_string() {
                 panic!(
                     "{} is not a valid use descriptor",
                     tokens[pos + 1].value_type
