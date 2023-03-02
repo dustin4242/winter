@@ -10,13 +10,6 @@ pub fn parser(tokens: &mut Vec<Token>) -> String {
     let mut pos = 0;
     while pos < tokens.len() {
         match tokens[pos].value_type.as_str() {
-            "word" => {
-                if tokens[pos + 1].value_type == "paren_open".to_string() {
-                    let func_name = &tokens[pos].value;
-                    let func_arguments = &tokens[pos + 2].value;
-                    asm_file[2].push(format!("{func_name}({func_arguments})"));
-                }
-            }
             "keyword" => match tokens[pos].value.as_str() {
                 "let" => {
                     let name = &tokens[pos + 1].value;
@@ -44,6 +37,11 @@ pub fn parser(tokens: &mut Vec<Token>) -> String {
                 }
                 _ => (),
             },
+            "word" => {
+                let func_name = &tokens[pos].value;
+                let func_arguments = &tokens[pos + 2].value;
+                asm_file[2].push(format!("{func_name}({func_arguments})"));
+            }
             _ => (),
         }
         pos += 1;
