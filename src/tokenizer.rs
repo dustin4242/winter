@@ -8,7 +8,12 @@ pub struct Snowflake {
 }
 
 pub fn tokenizer(file: String) -> Vec<Snowflake> {
-    let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+        .as_bytes()
+        .into_iter()
+        .map(|x| char::from_u32(*x as u32).unwrap())
+        .collect();
+    let viable_nums: Vec<char> = "1234567890"
         .as_bytes()
         .into_iter()
         .map(|x| char::from_u32(*x as u32).unwrap())
@@ -50,10 +55,19 @@ pub fn tokenizer(file: String) -> Vec<Snowflake> {
                 value: ":".to_string(),
             }),
             _ => {
-                if viable_chars.contains(&chars[pos]) {
-                    //Make a string to put the token value into
+                if viable_nums.contains(&chars[pos]) {
                     let mut token_value = "".to_string();
-                    //*Iterate until the entire token is built
+                    while pos < chars.len() && viable_nums.contains(&chars[pos]) {
+                        token_value.push(chars[pos]);
+                        pos += 1;
+                    }
+                    pos -= 1;
+                    tokens.push(Snowflake {
+                        value_type: "i8".to_string(),
+                        value: token_value,
+                    });
+                } else if viable_chars.contains(&chars[pos]) {
+                    let mut token_value = "".to_string();
                     while pos < chars.len() && viable_chars.contains(&chars[pos]) {
                         token_value.push(chars[pos]);
                         pos += 1;
