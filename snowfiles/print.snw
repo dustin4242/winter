@@ -1,4 +1,4 @@
-exportasm "macro print message {
+export "macro print message{
 	mov rax, 1
 	xor rdi, rdi
 	movzx rdx, [message]
