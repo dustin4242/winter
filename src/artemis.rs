@@ -37,13 +37,25 @@ fn keyword_handler(
             functions.insert(tokens[pos + 1].value.clone(), vec![]);
         }
         "let" => {
-            if pos + 2 > tokens.len() {
-                panic!("Missing 2 descriptors for let statement")
+            if pos + 4 > tokens.len() {
+                if pos + 2 > tokens.len() {
+                    panic!("Missing 2 descriptors for let statement");
+                }
             }
             if tokens[pos + 1].value_type != "word".to_string() {
                 panic!("Expected a word but found a {}", tokens[pos + 1].value_type);
             }
-            variables.insert(tokens[pos + 1].value.clone(), tokens[pos + 2].value.clone());
+            if tokens[pos + 2].value_type == "type_assignment".to_string() {
+                if tokens[pos + 3].value_type != "word" {
+                    panic!("\"{}\" is not a valid type", tokens[pos + 3].value);
+                }
+                variables.insert(tokens[pos + 1].value.clone(), tokens[pos + 2].value.clone());
+            } else {
+                variables.insert(
+                    tokens[pos + 1].value.clone(),
+                    tokens[pos + 2].value_type.clone(),
+                );
+            }
         }
         _ => (),
     }
