@@ -1,7 +1,9 @@
+mod artemis;
+mod hail;
 mod keywords;
 mod parser;
 mod tokenizer;
-mod artemis;
+use artemis::artemis;
 use parser::parser;
 use std::{
     env,
@@ -9,7 +11,6 @@ use std::{
     io::Error,
 };
 use tokenizer::tokenizer;
-use artemis::artemis;
 
 fn main() -> Result<(), Error> {
     let filename = env::args().nth(1).expect("Didn't Provide File");

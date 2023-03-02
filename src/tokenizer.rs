@@ -45,6 +45,10 @@ pub fn tokenizer(file: String) -> Vec<Snowflake> {
                 value_type: "paren_close".to_string(),
                 value: ")".to_string(),
             }),
+            ':' => tokens.push(Snowflake {
+                value_type: "type_assignment".to_string(),
+                value: ":".to_string(),
+            }),
             _ => {
                 if viable_chars.contains(&chars[pos]) {
                     //Make a string to put the token value into

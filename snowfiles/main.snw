@@ -1,4 +1,4 @@
 use "print"
 
-let msg = "Hello World"
+let msg: string = "Hello World"
 print(msg)

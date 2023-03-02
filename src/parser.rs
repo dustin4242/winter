@@ -13,10 +13,17 @@ pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
             "keyword" => match tokens[pos].value.as_str() {
                 "let" => {
                     let name = &tokens[pos + 1].value;
-                    let value = &tokens[pos + 2].value;
-                    let value_size = value.len();
-                    asm_file[1].push(format!("{name} db {value_size},\"{value}\""));
-                    pos += 2
+                    if &tokens[pos + 2].value == ":" {
+                        let value = &tokens[pos + 4].value;
+                        let value_size = value.len();
+                        asm_file[1].push(format!("{name} db {value_size},\"{value}\""));
+                        pos += 4;
+                    } else {
+                        let value = &tokens[pos + 2].value;
+                        let value_size = value.len();
+                        asm_file[1].push(format!("{name} db {value_size},\"{value}\""));
+                        pos += 2;
+                    }
                 }
                 "use" => {
                     tokens.remove(pos);
