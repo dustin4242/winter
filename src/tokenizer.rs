@@ -2,12 +2,12 @@ use crate::keywords::keywords;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
-pub struct Token {
+pub struct Snowflake {
     pub value_type: String,
     pub value: String,
 }
 
-pub fn tokenizer(file: String) -> Vec<Token> {
+pub fn tokenizer(file: String) -> Vec<Snowflake> {
     let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         .as_bytes()
         .into_iter()
@@ -18,7 +18,7 @@ pub fn tokenizer(file: String) -> Vec<Token> {
         .into_iter()
         .map(|x| char::from_u32(*x as u32).unwrap())
         .collect();
-    let mut tokens: Vec<Token> = Vec::new();
+    let mut tokens: Vec<Snowflake> = Vec::new();
     let mut pos = 0;
     let keywords = keywords();
     while pos < file.len() {
@@ -32,16 +32,16 @@ pub fn tokenizer(file: String) -> Vec<Token> {
                     token_value.push(chars[pos]);
                     pos += 1;
                 }
-                tokens.push(Token {
+                tokens.push(Snowflake {
                     value_type: "string".to_string(),
                     value: token_value,
                 });
             }
-            '(' => tokens.push(Token {
+            '(' => tokens.push(Snowflake {
                 value_type: "paren_open".to_string(),
                 value: "(".to_string(),
             }),
-            ')' => tokens.push(Token {
+            ')' => tokens.push(Snowflake {
                 value_type: "paren_close".to_string(),
                 value: ")".to_string(),
             }),
@@ -55,7 +55,7 @@ pub fn tokenizer(file: String) -> Vec<Token> {
                         pos += 1;
                     }
                     pos -= 1;
-                    tokens.push(Token {
+                    tokens.push(Snowflake {
                         value_type: if keywords.contains(&token_value) {
                             "keyword".to_string()
                         } else {

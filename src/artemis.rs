@@ -1,7 +1,7 @@
-use crate::tokenizer::Token;
+use crate::tokenizer::Snowflake;
 use std::{collections::HashMap, io::Error};
 
-pub fn artemis(tokens: &Vec<Token>) -> Result<(), Error> {
+pub fn artemis(tokens: &Vec<Snowflake>) -> Result<(), Error> {
     let mut variables: HashMap<String, String> = HashMap::new();
     let mut functions: HashMap<String, Vec<String>> = HashMap::new();
     let mut pos = 0;
@@ -18,7 +18,7 @@ pub fn artemis(tokens: &Vec<Token>) -> Result<(), Error> {
 
 fn keyword_handler(
     pos: usize,
-    tokens: &Vec<Token>,
+    tokens: &Vec<Snowflake>,
     variables: &mut HashMap<String, String>,
     functions: &mut HashMap<String, Vec<String>>,
 ) {
@@ -50,7 +50,7 @@ fn keyword_handler(
 
 fn word_handler(
     pos: usize,
-    tokens: &Vec<Token>,
+    tokens: &Vec<Snowflake>,
     variables: &HashMap<String, String>,
     functions: &HashMap<String, Vec<String>>,
 ) {

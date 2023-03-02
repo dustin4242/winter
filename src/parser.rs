@@ -1,7 +1,7 @@
-use crate::tokenizer::{tokenizer, Token};
+use crate::tokenizer::{tokenizer, Snowflake};
 use std::fs::read_to_string;
 
-pub fn parser(tokens: &mut Vec<Token>) -> String {
+pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
     let mut asm_file = [
         vec!["format ELF64 executable".to_string()],
         vec!["segment readable writeable".to_string()],
