@@ -5,7 +5,6 @@ endif
 let b:current_syntax = "snow"
 
 hi def link assignmentKeywords Keyword
-hi def link functionKeyword Keyword
 hi def link keywords Keyword
 hi def link types Type
 hi def link word Macro
