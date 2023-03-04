@@ -8,7 +8,7 @@ pub struct Snowflake {
 }
 
 pub fn tokenizer(file: String) -> Vec<Snowflake> {
-    let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+    let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-"
         .as_bytes()
         .into_iter()
         .map(|x| char::from_u32(*x as u32).unwrap())

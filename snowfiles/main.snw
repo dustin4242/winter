@@ -1,4 +1,4 @@
-use "print"
+use "print_num"
 
-let hello: string = "World"
-print(hello)
+let num: i8 = 5
+print_num(num)

@@ -1,14 +1,8 @@
 export "macro print_num number {
-	repeat 
-  		d = x MOD 10
-  		x = x DIV 10
-  		stringd = d + 48;
-  		store character somewhere
-	until x == 0
-	
 	mov rax, 1
 	xor rdi, rdi
-	movzx rdx, 1
-	mov rsi, [message] + 48
+	add [number], 48
+	mov rsi, number
+	mov rdx, 1
 	syscall
 }"
