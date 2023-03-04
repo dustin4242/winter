@@ -1,4 +1,4 @@
 use "print"
 
-let num = 69
-print(num)
+let hello: string = "World"
+print(hello)
