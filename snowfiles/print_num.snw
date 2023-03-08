@@ -1,8 +1,1 @@
-export "macro print_num number {
-	mov rax, 1
-	xor rdi, rdi
-	add [number], 48
-	mov rsi, number
-	mov rdx, 1
-	syscall
-}"
+export 'fn print_num(num: i8) { print!("{}", num) }'

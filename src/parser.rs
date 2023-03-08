@@ -2,11 +2,7 @@ use crate::tokenizer::{tokenizer, Snowflake};
 use std::fs::read_to_string;
 
 pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
-    let mut asm_file = [
-        vec!["format ELF64 executable".to_string()],
-        vec!["segment readable writeable".to_string()],
-        vec!["segment readable executable\nentry $".to_string()],
-    ];
+    let mut final_file = vec!["#[allow(unused)] fn main() {".to_string()];
     let mut pos = 0;
     while pos < tokens.len() {
         match tokens[pos].value_type.as_str() {
@@ -20,12 +16,13 @@ pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
                     };
                     let value_token = &tokens[pos];
                     match value_token.value_type.as_str() {
-                        "string" => {
-                            let value_size = value_token.value.len();
-                            asm_file[1]
-                                .push(format!("{name} db {value_size},\"{}\"", value_token.value));
+                        "string" => final_file.push(format!(
+                            "let mut {name}: String = \"{}\".to_string();",
+                            value_token.value
+                        )),
+                        "i8" => {
+                            final_file.push(format!("let mut {name}: i8 = {};", value_token.value))
                         }
-                        "i8" => asm_file[1].push(format!("{name} db {}", value_token.value)),
                         _ => (),
                     }
                 }
@@ -42,24 +39,19 @@ pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
                     continue;
                 }
                 "export" => {
-                    let asm = &tokens[pos + 1].value;
-                    asm_file[0].push(asm.to_owned());
-                    pos += 1;
+                    final_file.push(tokens[pos + 1].value.to_owned());
                 }
-                _ => (),
+                _ => unreachable!(),
             },
             "word" => {
                 let func_name = &tokens[pos].value;
                 let func_arguments = &tokens[pos + 2].value;
-                asm_file[2].push(format!("{func_name}({func_arguments})"));
+                final_file.push(format!("{func_name}({func_arguments})"));
                 pos += 2
             }
             _ => (),
         }
         pos += 1;
     }
-    asm_file[2].push("mov rax, 60\nmov rdi, 0\nsyscall".to_string());
-    let final_file =
-        asm_file[0].join("\n") + "\n" + &asm_file[1].join("\n") + "\n" + &asm_file[2].join("\n");
-    return final_file;
+    return final_file.join("\n") + "}\n";
 }

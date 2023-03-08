@@ -8,11 +8,12 @@ pub struct Snowflake {
 }
 
 pub fn tokenizer(file: String) -> Vec<Snowflake> {
-    let viable_chars: Vec<char> = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-"
-        .as_bytes()
-        .into_iter()
-        .map(|x| char::from_u32(*x as u32).unwrap())
-        .collect();
+    let viable_chars: Vec<char> =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-"
+            .as_bytes()
+            .into_iter()
+            .map(|x| char::from_u32(*x as u32).unwrap())
+            .collect();
     let viable_nums: Vec<char> = "1234567890"
         .as_bytes()
         .into_iter()
@@ -34,6 +35,18 @@ pub fn tokenizer(file: String) -> Vec<Snowflake> {
                 //Iterate until the entire token is built
                 pos += 1;
                 while pos < file.len() && chars[pos] != '"' {
+                    token_value.push(chars[pos]);
+                    pos += 1;
+                }
+                tokens.push(Snowflake {
+                    value_type: "string".to_string(),
+                    value: token_value,
+                });
+            }
+            '\'' => {
+                let mut token_value = "".to_string();
+                pos += 1;
+                while pos < file.len() && chars[pos] != '\'' {
                     token_value.push(chars[pos]);
                     pos += 1;
                 }

@@ -1,0 +1,10 @@
+format ELF64 executable
+fn print_num(num: i8) { print!(
+segment readable writeable
+num db 5
+segment readable executable
+entry $
+print_num(num)
+mov rax, 60
+mov rdi, 0
+syscall

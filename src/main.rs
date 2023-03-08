@@ -19,7 +19,7 @@ fn main() -> Result<(), Error> {
     artemis(&tokens).unwrap();
     let final_file = parser(&mut tokens);
     write(
-        filename.split(".").nth(0).unwrap().to_string() + ".fasm",
+        filename.split(".").nth(0).unwrap().to_string() + ".rs",
         final_file,
     )?;
 
