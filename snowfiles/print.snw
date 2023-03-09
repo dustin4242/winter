@@ -1,1 +1,1 @@
-export 'fn print(msg: String) { print!("{msg}") }'
+export 'fn print<T: std::fmt::Display>(msg: T) { print!("{msg}") }'

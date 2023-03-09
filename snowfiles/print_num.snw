@@ -1,1 +1,0 @@
-export 'fn print_num(num: i8) { print!("{}", num) }'

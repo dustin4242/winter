@@ -1,8 +1,6 @@
 use "print"
-use "print_num"
 
 let num: i8 = 5
-print_num(num)
-
 let hello: string = "World"
+print(num)
 print(hello)
