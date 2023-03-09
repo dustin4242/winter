@@ -46,7 +46,7 @@ pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
             "word" => {
                 let func_name = &tokens[pos].value;
                 let func_arguments = &tokens[pos + 2].value;
-                final_file.push(format!("{func_name}({func_arguments})"));
+                final_file.push(format!("{func_name}({func_arguments});"));
                 pos += 2
             }
             _ => (),
