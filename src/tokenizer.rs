@@ -1,6 +1,5 @@
 use crate::keywords::keywords;
 
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Snowflake {
     pub value_type: String,
@@ -8,35 +7,20 @@ pub struct Snowflake {
 }
 
 pub fn tokenizer(file: String) -> Vec<Snowflake> {
-    let viable_chars: Vec<char> =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-"
-            .as_bytes()
-            .into_iter()
-            .map(|x| char::from_u32(*x as u32).unwrap())
-            .collect();
-    let viable_nums: Vec<char> = "1234567890"
-        .as_bytes()
-        .into_iter()
-        .map(|x| char::from_u32(*x as u32).unwrap())
-        .collect();
-    let chars: Vec<char> = file
-        .as_bytes()
-        .into_iter()
-        .map(|x| char::from_u32(*x as u32).unwrap())
-        .collect();
+    let viable_chars =
+        to_chars("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-".as_bytes());
+    let viable_nums = to_chars("1234567890".as_bytes());
+    let chars = to_chars(file.as_bytes());
     let mut tokens: Vec<Snowflake> = Vec::new();
     let mut pos = 0;
     let keywords = keywords();
     while pos < file.len() {
         match chars[pos] {
             '"' => {
-                //Make a string to put the token value into
                 let mut token_value = "".to_string();
-                //Iterate until the entire token is built
-                pos += 1;
-                while pos < file.len() && chars[pos] != '"' {
-                    token_value.push(chars[pos]);
+                while pos + 1 < file.len() && chars[pos + 1] != '"' {
                     pos += 1;
+                    token_value.push(chars[pos]);
                 }
                 tokens.push(Snowflake {
                     value_type: "string".to_string(),
@@ -100,4 +84,11 @@ pub fn tokenizer(file: String) -> Vec<Snowflake> {
         pos += 1;
     }
     tokens
+}
+
+fn to_chars(string: &[u8]) -> Vec<char> {
+    string
+        .into_iter()
+        .map(|x| char::from_u32(*x as u32).unwrap())
+        .collect()
 }
