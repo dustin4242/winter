@@ -1,7 +1,7 @@
 use crate::{hail, tokenizer::Snowflake};
 use std::collections::HashMap;
 
-pub fn artemis(tokens: &Vec<Snowflake>) {
+pub fn hunt(tokens: &Vec<Snowflake>) {
     let mut variables: HashMap<String, String> = HashMap::new();
     let mut functions: HashMap<String, Vec<String>> = HashMap::new();
     let mut pos = 0;

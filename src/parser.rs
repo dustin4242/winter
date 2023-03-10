@@ -1,7 +1,8 @@
-use crate::tokenizer::{tokenizer, Snowflake};
+use crate::tokenizer;
 use std::fs::read_to_string;
+use tokenizer::Snowflake;
 
-pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
+pub fn run(tokens: &mut Vec<Snowflake>) -> String {
     let mut final_file = vec!["#[allow(unused)] fn main() {".to_string()];
     let mut pos = 0;
     while pos < tokens.len() {
@@ -28,7 +29,7 @@ pub fn parser(tokens: &mut Vec<Snowflake>) -> String {
                 }
                 "use" => {
                     tokens.remove(pos);
-                    let append_tokens = tokenizer(
+                    let append_tokens = tokenizer::run(
                         read_to_string(format!("./snowfiles/{}.snw", tokens[pos].value)).unwrap(),
                     );
                     tokens.remove(pos);

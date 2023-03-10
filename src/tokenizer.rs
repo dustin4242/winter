@@ -1,12 +1,14 @@
+//! Crate Comment
 use crate::keywords::keywords;
 
+/// Snowflake is also known as a Token
 #[derive(Debug, Clone)]
 pub struct Snowflake {
     pub value_type: String,
     pub value: String,
 }
 
-pub fn tokenizer(file: String) -> Vec<Snowflake> {
+pub fn run(file: String) -> Vec<Snowflake> {
     let viable_chars =
         to_chars("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_-".as_bytes());
     let viable_nums = to_chars("1234567890".as_bytes());
