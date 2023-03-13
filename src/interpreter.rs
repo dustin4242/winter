@@ -1,12 +1,13 @@
-use crate::tokenizer;
+use crate::{hail, tokenizer};
 use std::{collections::HashMap, fs::read_to_string};
 
 pub fn run() {
-    let mut line: String = "".to_string();
     let mut variables: HashMap<String, String> = HashMap::new();
     let mut functions: HashMap<String, String> = HashMap::new();
+    let types = hail::types();
     loop {
         let mut pos = 0;
+        let mut line: String = "".to_string();
         std::io::stdin().read_line(&mut line).unwrap();
         let tokens = tokenizer::run(line.to_owned());
         while pos < tokens.len() {
@@ -26,14 +27,16 @@ pub fn run() {
                             continue;
                         }
                         if tokens[pos + 2].value_type == "type_assignment".to_string() {
-                            if tokens[pos + 3].value_type != "word" {
+                            if tokens[pos + 3].value_type != "word".to_string()
+                                || !types.contains(&tokens[pos + 3].value)
+                            {
                                 eprintln!("\"{}\" is not a valid type", tokens[pos + 3].value);
                                 pos = tokens.len();
                                 continue;
                             }
                             variables.insert(
                                 tokens[pos + 1].value.clone(),
-                                tokens[pos + 2].value.clone(),
+                                tokens[pos + 3].value.clone(),
                             );
                             pos += 4;
                         } else {
@@ -72,10 +75,14 @@ pub fn run() {
                         functions.insert(tokens[pos + 1].value.clone(), function);
                         pos += 2;
                     }
-                    _ => (),
+                    x => unreachable!("shouldn't be here: {x}"),
                 },
                 "word" => {
-                    let contains = (variables.contains_key(&tokens[pos].value),);
+                    let contains = (
+                        variables.contains_key(&tokens[pos].value),
+                        functions.contains_key(&tokens[pos].value),
+                        types.contains(&tokens[pos].value),
+                    );
                     if !contains.0 {
                         if pos.checked_sub(1).is_some()
                             && &tokens[pos - 1].value_type == "type_assignment"
@@ -89,8 +96,9 @@ pub fn run() {
                             continue;
                         }
                     }
+                    println!("what")
                 }
-                _ => unreachable!(),
+                x => unreachable!("shouldn't be here: {x}"),
             }
             pos += 1;
         }

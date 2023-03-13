@@ -28,18 +28,19 @@ pub fn run(file: String) -> Vec<Snowflake> {
                     value_type: "string".to_string(),
                     value: token_value,
                 });
+                pos += 1;
             }
             '\'' => {
                 let mut token_value = "".to_string();
-                pos += 1;
-                while pos < file.len() && chars[pos] != '\'' {
-                    token_value.push(chars[pos]);
+                while pos + 1 < file.len() && chars[pos + 1] != '\'' {
                     pos += 1;
+                    token_value.push(chars[pos]);
                 }
                 tokens.push(Snowflake {
                     value_type: "string".to_string(),
                     value: token_value,
                 });
+                pos += 1;
             }
             '(' => tokens.push(Snowflake {
                 value_type: "paren_open".to_string(),
