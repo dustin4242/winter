@@ -1,13 +1,24 @@
 use crate::{hail, tokenizer};
 use std::{collections::HashMap, fs::read_to_string};
 
+#[allow(dead_code)]
+struct Variable {
+    var_type: String,
+    value: String,
+}
+impl Variable {
+    fn new(var_type: String, value: String) -> Variable {
+        Variable { var_type, value }
+    }
+}
+
 pub fn run() {
-    let mut variables: HashMap<String, String> = HashMap::new();
+    let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut functions: HashMap<String, String> = HashMap::new();
     let types = hail::types();
     loop {
         let mut pos = 0;
-        let mut line: String = "".to_string();
+        let mut line= "".to_string();
         std::io::stdin().read_line(&mut line).unwrap();
         let tokens = tokenizer::run(line.to_owned());
         while pos < tokens.len() {
@@ -34,16 +45,24 @@ pub fn run() {
                                 pos = tokens.len();
                                 continue;
                             }
-                            variables.insert(
+                            let (name, variable) = (
                                 tokens[pos + 1].value.clone(),
-                                tokens[pos + 3].value.clone(),
+                                Variable::new(
+                                    tokens[pos + 3].value_type.clone(),
+                                    tokens[pos + 3].value.clone(),
+                                ),
                             );
+                            variables.insert(name, variable);
                             pos += 4;
                         } else {
-                            variables.insert(
+                            let (name, variable) = (
                                 tokens[pos + 1].value.clone(),
-                                tokens[pos + 2].value_type.clone(),
+                                Variable::new(
+                                    tokens[pos + 2].value_type.clone(),
+                                    tokens[pos + 2].value.clone(),
+                                ),
                             );
+                            variables.insert(name, variable);
                             pos += 2;
                         }
                     }
