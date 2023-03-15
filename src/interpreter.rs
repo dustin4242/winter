@@ -1,5 +1,8 @@
-use crate::{hail, tokenizer};
-use std::{collections::HashMap, fs::read_to_string};
+use crate::{
+    hail,
+    tokenizer::{self, Snowflake},
+};
+use std::{collections::HashMap, fs::read_to_string, io::Write};
 
 #[allow(dead_code)]
 struct Variable {
@@ -16,11 +19,14 @@ pub fn run() {
     let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut functions: HashMap<String, String> = HashMap::new();
     let types = hail::types();
+
+    let mut pos: usize;
+    let mut line: String;
+    let mut tokens: Vec<Snowflake>;
     loop {
-        let mut pos = 0;
-        let mut line= "".to_string();
-        std::io::stdin().read_line(&mut line).unwrap();
-        let tokens = tokenizer::run(line.to_owned());
+        pos = 0;
+        line = get_user_input();
+        tokens = tokenizer::run(line.to_owned());
         while pos < tokens.len() {
             match tokens[pos].value_type.as_str() {
                 "keyword" => match tokens[pos].value.as_str() {
@@ -122,4 +128,13 @@ pub fn run() {
             pos += 1;
         }
     }
+}
+
+fn get_user_input() -> String {
+    let mut temp_string = "".to_string();
+    let mut output = std::io::stdout();
+    output.write_all(b"> ").unwrap();
+    output.flush().unwrap();
+    std::io::stdin().read_line(&mut temp_string).unwrap();
+    temp_string
 }
