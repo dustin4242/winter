@@ -30,48 +30,7 @@ pub fn run() {
         while pos < tokens.len() {
             match tokens[pos].value_type.as_str() {
                 "keyword" => match tokens[pos].value.as_str() {
-                    "let" => {
-                        if pos + 4 > tokens.len() {
-                            if pos + 2 > tokens.len() {
-                                eprintln!("Missing 2 descriptors for let statement");
-                                pos = tokens.len();
-                                continue;
-                            }
-                        }
-                        if tokens[pos + 1].value_type != "word".to_string() {
-                            eprintln!("Expected a word but found a {}", tokens[pos + 1].value_type);
-                            pos = tokens.len();
-                            continue;
-                        }
-                        if tokens[pos + 2].value_type == "type_assignment".to_string() {
-                            if tokens[pos + 3].value_type != "word".to_string()
-                                || !types.contains(&tokens[pos + 3].value)
-                            {
-                                eprintln!("\"{}\" is not a valid type", tokens[pos + 3].value);
-                                pos = tokens.len();
-                                continue;
-                            }
-                            let (name, variable) = (
-                                tokens[pos + 1].value.clone(),
-                                Variable::new(
-                                    tokens[pos + 3].value_type.clone(),
-                                    tokens[pos + 3].value.clone(),
-                                ),
-                            );
-                            variables.insert(name, variable);
-                            pos += 4;
-                        } else {
-                            let (name, variable) = (
-                                tokens[pos + 1].value.clone(),
-                                Variable::new(
-                                    tokens[pos + 2].value_type.clone(),
-                                    tokens[pos + 2].value.clone(),
-                                ),
-                            );
-                            variables.insert(name, variable);
-                            pos += 2;
-                        }
-                    }
+                    "let" => pos = let_handler(&mut tokens, pos, &types, &mut variables),
                     "use" => {
                         if pos + 1 > tokens.len() {
                             eprintln!("No snow file specified to use");
@@ -137,4 +96,53 @@ fn get_user_input() -> String {
     output.flush().unwrap();
     std::io::stdin().read_line(&mut temp_string).unwrap();
     temp_string
+}
+
+fn let_handler(
+    tokens: &mut Vec<Snowflake>,
+    mut pos: usize,
+    types: &Vec<String>,
+    variables: &mut HashMap<String, Variable>,
+) -> usize {
+    if pos + 4 > tokens.len() {
+        if pos + 2 > tokens.len() {
+            eprintln!("Missing 2 descriptors for let statement");
+            pos = tokens.len() - 1;
+            return pos;
+        }
+    }
+    if tokens[pos + 1].value_type != "word".to_string() {
+        eprintln!("Expected a word but found a {}", tokens[pos + 1].value_type);
+        pos = tokens.len() - 1;
+        return pos;
+    }
+    if tokens[pos + 2].value_type == "type_assignment".to_string() {
+        if tokens[pos + 3].value_type != "word".to_string()
+            || !types.contains(&tokens[pos + 3].value)
+        {
+            eprintln!("\"{}\" is not a valid type", tokens[pos + 3].value);
+            pos = tokens.len() - 1;
+            return pos;
+        }
+        let (name, variable) = (
+            tokens[pos + 1].value.clone(),
+            Variable::new(
+                tokens[pos + 3].value_type.clone(),
+                tokens[pos + 3].value.clone(),
+            ),
+        );
+        variables.insert(name, variable);
+        pos += 4;
+    } else {
+        let (name, variable) = (
+            tokens[pos + 1].value.clone(),
+            Variable::new(
+                tokens[pos + 2].value_type.clone(),
+                tokens[pos + 2].value.clone(),
+            ),
+        );
+        variables.insert(name, variable);
+        pos += 2;
+    }
+    pos
 }

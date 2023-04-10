@@ -1,6 +1,5 @@
 use "print"
 
-let num: i8 = 5
-let hello: string = "World"
-print(num)
+let hello = "world!"
+print("Hello, ")
 print(hello)
