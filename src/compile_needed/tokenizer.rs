@@ -1,12 +1,4 @@
-//! Crate Comment
-use crate::keywords::keywords;
-
-/// Snowflake is also known as a Token
-#[derive(Debug, Clone)]
-pub struct Snowflake {
-    pub value_type: String,
-    pub value: String,
-}
+use crate::definitions::keywords::{keywords, Snowflake};
 
 pub fn run(file: String) -> Vec<Snowflake> {
     let viable_chars =

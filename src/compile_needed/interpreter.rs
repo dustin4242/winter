@@ -1,6 +1,6 @@
 use crate::{
-    hail,
-    tokenizer::{self, Snowflake},
+    compile_needed::tokenizer,
+    definitions::{hail, keywords::Snowflake},
 };
 use std::{collections::HashMap, fs::read_to_string, io::Write};
 

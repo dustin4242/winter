@@ -1,4 +1,4 @@
-use crate::{hail, tokenizer::Snowflake};
+use crate::definitions::{hail, keywords::Snowflake};
 use std::collections::HashMap;
 
 pub fn hunt(tokens: &Vec<Snowflake>) {

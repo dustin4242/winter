@@ -1,6 +1,5 @@
-use crate::tokenizer;
+use crate::{compile_needed::tokenizer, definitions::keywords::Snowflake};
 use std::fs::read_to_string;
-use tokenizer::Snowflake;
 
 pub fn run(tokens: &mut Vec<Snowflake>) -> String {
     let mut final_file = vec!["#[allow(unused)] fn main() {".to_string()];
