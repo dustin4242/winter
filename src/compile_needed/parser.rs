@@ -1,4 +1,7 @@
-use crate::{compile_needed::tokenizer, definitions::keywords::Snowflake};
+use crate::{
+    compile_needed::tokenizer,
+    definitions::keywords::{Snowflake, Token::*, Types},
+};
 use std::fs::read_to_string;
 
 pub fn run(tokens: &mut Vec<Snowflake>) -> String {
@@ -11,15 +14,19 @@ pub fn run(tokens: &mut Vec<Snowflake>) -> String {
 }
 
 fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<String>) -> usize {
-    match tokens[pos].value_type.as_str() {
-        "keyword" => match tokens[pos].value.as_str() {
+    match tokens[pos].value_type {
+        Types::Token(Keyword) => match tokens[pos].value.as_str() {
             "let" => let_handler(tokens, pos, final_file),
             "use" => use_handler(tokens, pos),
             "export" => export_handler(tokens, pos, final_file),
             _ => unreachable!(),
         },
-        "word" => word_handler(tokens, pos, final_file),
-        _ => unreachable!("{:?}", tokens[pos]),
+        Types::Token(Word) => word_handler(tokens, pos, final_file),
+        _ => unreachable!(
+            "Snowflake: {:?}, {:?}",
+            tokens[pos].value_type.to_string(),
+            tokens[pos].value
+        ),
     }
 }
 
@@ -27,18 +34,19 @@ fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<S
 
 fn let_handler(tokens: &mut Vec<Snowflake>, mut pos: usize, final_file: &mut Vec<String>) -> usize {
     let name = &tokens[pos + 1].value;
-    pos += if &tokens[pos + 2].value_type == "type_assignment" {
-        4
-    } else {
-        2
+    pos += match &tokens[pos + 2].value_type {
+        Types::Token(TypeAssignment) => 4,
+        _ => 2,
     };
     let value_token = &tokens[pos];
-    match value_token.value_type.as_str() {
-        "string" => final_file.push(format!(
+    match value_token.value_type {
+        Types::String => final_file.push(format!(
             "let mut {name}: String = \"{}\".to_string();",
             value_token.value
         )),
-        "i8" => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
+        Types::I8 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
+        Types::I16 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
+        Types::I32 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
         _ => (),
     }
     pos
@@ -50,8 +58,8 @@ fn use_handler(tokens: &mut Vec<Snowflake>, mut pos: usize) -> usize {
     );
     pos += 2;
     for i in 0..append_tokens.len() {
-        let value = &append_tokens[i];
-        tokens.insert(pos + i, value.clone());
+        let value = append_tokens[i].clone();
+        tokens.insert(pos + i, value);
     }
     pos - 1
 }
@@ -65,7 +73,7 @@ fn word_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<St
     let func_name = &tokens[pos].value;
     let func_arguments = &tokens[pos + 2];
     let value = &func_arguments.value;
-    if func_arguments.value_type != "string" {
+    if func_arguments.value_type != Types::String {
         final_file.push(format!("{func_name}({value});"));
     } else {
         final_file.push(format!("{func_name}(\"{value}\");"));

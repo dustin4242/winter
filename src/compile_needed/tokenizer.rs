@@ -1,4 +1,4 @@
-use crate::definitions::keywords::{keywords, Snowflake};
+use crate::definitions::keywords::{keywords, Snowflake, Token::*, Types};
 
 pub fn run(file: String) -> Vec<Snowflake> {
     let viable_chars =
@@ -16,10 +16,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake {
-                    value_type: "string".to_string(),
-                    value: token_value,
-                });
+                tokens.push(Snowflake::new(Types::String, token_value));
                 pos += 1;
             }
             '\'' => {
@@ -28,36 +25,31 @@ pub fn run(file: String) -> Vec<Snowflake> {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake {
-                    value_type: "string".to_string(),
-                    value: token_value,
-                });
+                tokens.push(Snowflake::new(Types::String, token_value));
                 pos += 1;
             }
             '(' => tokens.push(Snowflake {
-                value_type: "paren_open".to_string(),
+                value_type: Types::Token(ParenOpen),
                 value: "(".to_string(),
             }),
             ')' => tokens.push(Snowflake {
-                value_type: "paren_close".to_string(),
+                value_type: Types::Token(ParenClose),
                 value: ")".to_string(),
             }),
-            ':' => tokens.push(Snowflake {
-                value_type: "type_assignment".to_string(),
-                value: ":".to_string(),
-            }),
+            ':' => tokens.push(Snowflake::new(
+                Types::Token(TypeAssignment),
+                ":".to_string(),
+            )),
+            '+' => tokens.push(Snowflake::new(Types::Token(Operator), "+")),
             _ => {
                 if viable_nums.contains(&chars[pos]) {
-                    let mut token_value = "".to_string();
+                    let mut token_value = String::new();
                     while pos < chars.len() && viable_nums.contains(&chars[pos]) {
                         token_value.push(chars[pos]);
                         pos += 1;
                     }
                     pos -= 1;
-                    tokens.push(Snowflake {
-                        value_type: "i8".to_string(),
-                        value: token_value,
-                    });
+                    tokens.push(Snowflake::new(Types::I8, token_value));
                 } else if viable_chars.contains(&chars[pos]) {
                     let mut token_value = "".to_string();
                     while pos < chars.len() && viable_chars.contains(&chars[pos]) {
@@ -65,14 +57,14 @@ pub fn run(file: String) -> Vec<Snowflake> {
                         pos += 1;
                     }
                     pos -= 1;
-                    tokens.push(Snowflake {
-                        value_type: if keywords.contains(&token_value) {
-                            "keyword".to_string()
+                    tokens.push(Snowflake::new(
+                        if keywords.contains(&token_value) {
+                            Types::Token(Keyword)
                         } else {
-                            "word".to_string()
+                            Types::Token(Word)
                         },
-                        value: token_value,
-                    });
+                        token_value,
+                    ));
                 }
             }
         }

@@ -10,7 +10,10 @@ use std::{
 fn main() -> Result<(), Error> {
     let args = env::args();
     if args.len() > 1 {
-        let filename = env::args().nth(1).expect("Didn't Provide File");
+        let filename = env::args().nth(1).expect("file not provided");
+        if !filename.ends_with(".snw") {
+            panic!("file \"{filename}\" is not a valid snw file")
+        };
         let file = read_to_string("./".to_string() + &filename)?;
         let mut tokens = compile_needed::tokenizer::run(file);
         error_checking::artemis::hunt(&tokens);

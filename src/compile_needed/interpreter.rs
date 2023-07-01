@@ -1,16 +1,16 @@
 use crate::{
     compile_needed::tokenizer,
-    definitions::{hail, keywords::Snowflake},
+    definitions::keywords::{Snowflake, Token::*, Types},
 };
 use std::{collections::HashMap, fs::read_to_string, io::Write};
 
 #[allow(dead_code)]
 struct Variable {
-    var_type: String,
+    var_type: Types,
     value: String,
 }
 impl Variable {
-    fn new(var_type: String, value: String) -> Variable {
+    fn new(var_type: Types, value: String) -> Variable {
         Variable { var_type, value }
     }
 }
@@ -18,7 +18,6 @@ impl Variable {
 pub fn run() {
     let mut variables: HashMap<String, Variable> = HashMap::new();
     let mut functions: HashMap<String, String> = HashMap::new();
-    let types = hail::types();
 
     let mut pos: usize;
     let mut line: String;
@@ -28,19 +27,19 @@ pub fn run() {
         line = get_user_input();
         tokens = tokenizer::run(line.to_owned());
         while pos < tokens.len() {
-            match tokens[pos].value_type.as_str() {
-                "keyword" => match tokens[pos].value.as_str() {
-                    "let" => pos = let_handler(&mut tokens, pos, &types, &mut variables),
+            match &tokens[pos].value_type {
+                Types::Token(Keyword) => match tokens[pos].value.as_str() {
+                    "let" => pos = let_handler(&mut tokens, pos, &mut variables),
                     "use" => {
                         if pos + 1 > tokens.len() {
                             eprintln!("No snow file specified to use");
                             pos = tokens.len();
                             continue;
                         }
-                        if tokens[pos + 1].value_type != "string".to_string() {
+                        if tokens[pos + 1].value_type != Types::String {
                             eprintln!(
                                 "{} is not a valid use descriptor",
-                                tokens[pos + 1].value_type
+                                tokens[pos + 1].value_type.to_string()
                             );
                             pos = tokens.len();
                             continue;
@@ -61,15 +60,15 @@ pub fn run() {
                     }
                     x => unreachable!("shouldn't be here: {x}"),
                 },
-                "word" => {
+                Types::Token(Word) => {
                     let contains = (
                         variables.contains_key(&tokens[pos].value),
                         functions.contains_key(&tokens[pos].value),
-                        types.contains(&tokens[pos].value),
+                        Types::is_type(tokens[pos].value.to_owned()),
                     );
                     if !contains.0 {
                         if pos.checked_sub(1).is_some()
-                            && &tokens[pos - 1].value_type == "type_assignment"
+                            && tokens[pos - 1].value_type == Types::Token(TypeAssignment)
                         {
                             eprintln!("Unknown type used: {}", tokens[pos].value);
                             pos = tokens.len();
@@ -82,7 +81,7 @@ pub fn run() {
                     }
                     println!("what")
                 }
-                x => unreachable!("shouldn't be here: {x}"),
+                x => unreachable!("shouldn't be here: {}", x.to_string()),
             }
             pos += 1;
         }
@@ -101,7 +100,6 @@ fn get_user_input() -> String {
 fn let_handler(
     tokens: &mut Vec<Snowflake>,
     mut pos: usize,
-    types: &Vec<String>,
     variables: &mut HashMap<String, Variable>,
 ) -> usize {
     if pos + 4 > tokens.len() {
@@ -111,14 +109,17 @@ fn let_handler(
             return pos;
         }
     }
-    if tokens[pos + 1].value_type != "word".to_string() {
-        eprintln!("Expected a word but found a {}", tokens[pos + 1].value_type);
+    if tokens[pos + 1].value_type != Types::Token(Word) {
+        eprintln!(
+            "Expected a word but found a {}",
+            tokens[pos + 1].value_type.to_string()
+        );
         pos = tokens.len() - 1;
         return pos;
     }
-    if tokens[pos + 2].value_type == "type_assignment".to_string() {
-        if tokens[pos + 3].value_type != "word".to_string()
-            || !types.contains(&tokens[pos + 3].value)
+    if tokens[pos + 2].value_type == Types::Token(TypeAssignment) {
+        if tokens[pos + 3].value_type != Types::Token(Word)
+            || Types::is_type(tokens[pos + 3].value.to_owned())
         {
             eprintln!("\"{}\" is not a valid type", tokens[pos + 3].value);
             pos = tokens.len() - 1;
@@ -126,20 +127,14 @@ fn let_handler(
         }
         let (name, variable) = (
             tokens[pos + 1].value.clone(),
-            Variable::new(
-                tokens[pos + 3].value_type.clone(),
-                tokens[pos + 3].value.clone(),
-            ),
+            Variable::new(tokens[pos + 3].value_type, tokens[pos + 3].value.clone()),
         );
         variables.insert(name, variable);
         pos += 4;
     } else {
         let (name, variable) = (
             tokens[pos + 1].value.clone(),
-            Variable::new(
-                tokens[pos + 2].value_type.clone(),
-                tokens[pos + 2].value.clone(),
-            ),
+            Variable::new(tokens[pos + 2].value_type, tokens[pos + 2].value.clone()),
         );
         variables.insert(name, variable);
         pos += 2;
