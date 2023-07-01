@@ -1,3 +1,9 @@
+#[derive(Debug, Clone)]
+pub struct Snowflake {
+    pub value_type: String,
+    pub value: String,
+}
+
 pub fn keywords() -> Vec<String> {
     vec!["let", "use", "export"]
         .into_iter()
