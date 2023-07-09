@@ -52,7 +52,7 @@ impl Types {
             "i8" => Types::I8,
             "i16" => Types::I16,
             "i32" => Types::I32,
-            _ => unreachable!(),
+            x => panic!("unknown type: {x}"),
         }
     }
 }

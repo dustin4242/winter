@@ -41,6 +41,16 @@ pub fn run(file: String) -> Vec<Snowflake> {
                 ":".to_string(),
             )),
             '+' => tokens.push(Snowflake::new(Types::Token(Operator), "+")),
+            '-' => tokens.push(Snowflake::new(Types::Token(Operator), "-")),
+            '*' => tokens.push(Snowflake::new(Types::Token(Operator), "*")),
+            '/' => {
+                if chars[pos + 1] != '/' {
+                    tokens.push(Snowflake::new(Types::Token(Operator), "/"))
+                }
+                while chars[pos] != '\n' {
+                    pos += 1;
+                }
+            }
             _ => {
                 if viable_nums.contains(&chars[pos]) {
                     let mut token_value = String::new();
@@ -49,7 +59,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                         pos += 1;
                     }
                     pos -= 1;
-                    tokens.push(Snowflake::new(Types::I8, token_value));
+                    tokens.push(Snowflake::new(Types::I32, token_value));
                 } else if viable_chars.contains(&chars[pos]) {
                     let mut token_value = "".to_string();
                     while pos < chars.len() && viable_chars.contains(&chars[pos]) {

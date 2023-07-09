@@ -45,8 +45,8 @@ fn let_handler(tokens: &mut Vec<Snowflake>, mut pos: usize, final_file: &mut Vec
             value_token.value
         )),
         Types::I8 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
-        Types::I16 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
-        Types::I32 => final_file.push(format!("let mut {name}: i8 = {};", value_token.value)),
+        Types::I16 => final_file.push(format!("let mut {name}: i16 = {};", value_token.value)),
+        Types::I32 => final_file.push(format!("let mut {name}: i32 = {};", value_token.value)),
         _ => (),
     }
     pos

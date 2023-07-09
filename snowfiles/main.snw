@@ -1,5 +1,7 @@
 use "print"
 
-let hello = "world!"
-print("Hello, ")
+// Added Comments Baby
+let hello = "Hello, world! "
+let world = 8
 print(hello)
+print(world)
