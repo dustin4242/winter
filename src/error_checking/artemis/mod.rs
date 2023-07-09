@@ -1,10 +1,8 @@
 use crate::definitions::keywords::{Snowflake, Token::*, Types};
 use std::collections::HashMap;
 
-mod const_k;
-mod let_k;
-mod use_k;
-mod word;
+mod handlers;
+use handlers::*;
 
 pub fn hunt(tokens: &Vec<Snowflake>) {
     let mut variables: HashMap<String, Types> = HashMap::new();

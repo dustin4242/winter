@@ -1,10 +1,7 @@
 use crate::definitions::keywords::{Snowflake, Token::*, Types};
 
-mod const_k;
-mod export_k;
-mod let_k;
-mod use_k;
-mod word;
+mod handlers;
+use handlers::*;
 
 pub fn run(tokens: &mut Vec<Snowflake>) -> String {
     let mut final_file = vec!["#[allow(unused)] fn main() {".to_string()];
