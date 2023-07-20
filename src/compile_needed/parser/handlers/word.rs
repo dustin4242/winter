@@ -1,13 +1,12 @@
-use crate::definitions::keywords::{Snowflake, Types};
+use crate::definitions::keywords::{Snowflake, Token::*, Types};
 
 pub fn handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<String>) -> usize {
-    let func_name = &tokens[pos].value;
-    let func_arguments = &tokens[pos + 2];
-    let value = &func_arguments.value;
-    if func_arguments.value_type != Types::String {
-        final_file.push(format!("{func_name}({value});"));
-    } else {
-        final_file.push(format!("{func_name}(\"{value}\");"));
+    let token = &tokens[pos].value;
+    match tokens[pos - 1].value_type {
+        Types::Token(Operator) => final_file.push(format!("{token}")),
+        Types::Token(Keyword) => final_file.push(format!("{token}")),
+        Types::Token(ParenOpen) => final_file.push(format!("{token}")),
+        _ => final_file.push(format!(";{token}")),
     }
-    pos + 3
+    pos
 }
