@@ -40,6 +40,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                 Types::Token(TypeAssignment),
                 ":".to_string(),
             )),
+            '=' => tokens.push(Snowflake::new(Types::Token(Operator), "=")),
             '+' => tokens.push(Snowflake::new(Types::Token(Operator), "+")),
             '-' => tokens.push(Snowflake::new(Types::Token(Operator), "-")),
             '*' => tokens.push(Snowflake::new(Types::Token(Operator), "*")),

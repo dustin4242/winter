@@ -14,18 +14,24 @@ pub fn run(tokens: &mut Vec<Snowflake>) -> String {
 
 fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<String>) -> usize {
     match tokens[pos].value_type {
+        Types::String => {
+            final_file.push(format!("\"{}\"", &tokens[pos].value));
+            pos
+        }
         Types::Token(Keyword) => match tokens[pos].value.as_str() {
-            "let" => let_k::handler(tokens, pos, final_file),
-            "const" => const_k::handler(tokens, pos, final_file),
+            "let" => let_k::handler(pos, final_file),
+            "const" => const_k::handler(pos, final_file),
             "use" => use_k::handler(tokens, pos),
             "export" => export_k::handler(tokens, pos, final_file),
             _ => unreachable!(),
         },
         Types::Token(Word) => word::handler(tokens, pos, final_file),
-        _ => unreachable!(
-            "Snowflake: {:?}, {:?}",
-            tokens[pos].value_type.to_string(),
-            tokens[pos].value
-        ),
+        _ => general_handler(tokens, final_file, pos),
     }
+}
+
+fn general_handler(tokens: &mut Vec<Snowflake>, final_file: &mut Vec<String>, pos: usize) -> usize {
+    let token = &tokens[pos].value;
+    final_file.push(token.to_owned());
+    pos
 }
