@@ -1,5 +1,5 @@
-pub mod const_k;
-pub mod export_k;
-pub mod let_k;
-pub mod use_k;
+pub mod const_keyword;
+pub mod export_keyword;
+pub mod let_keyword;
+pub mod use_keyword;
 pub mod word;

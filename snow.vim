@@ -10,7 +10,7 @@ hi def link types Type
 hi def link word Macro
 
 syn keyword assignmentKeywords let const
-syn keyword keywords use
+syn keyword keywords use export
 syn keyword types string
 syn match word '\a\a*' contained
 syn match Number '[0-9]'

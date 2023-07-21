@@ -24,6 +24,7 @@ pub enum Types {
 #[derive(PartialEq, Copy, Clone)]
 pub enum Token {
     Operator,
+    Comma,
     TypeAssignment,
     Word,
     Keyword,
