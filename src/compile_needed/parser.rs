@@ -14,10 +14,6 @@ pub fn run(tokens: &mut Vec<Snowflake>) -> String {
 
 fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<String>) -> usize {
     match tokens[pos].value_type {
-        Types::String => {
-            final_file.push(format!("\"{}\"", &tokens[pos].value));
-            pos
-        }
         Types::Token(Keyword) => match tokens[pos].value.as_str() {
             "let" => let_keyword::handler(pos, final_file),
             "const" => const_keyword::handler(pos, final_file),

@@ -11,21 +11,21 @@ pub fn run(file: String) -> Vec<Snowflake> {
     while pos < file.len() {
         match chars[pos] {
             '"' => {
-                let mut token_value = "".to_string();
+                let mut token_value = '"'.to_string();
                 while pos + 1 < file.len() && chars[pos + 1] != '"' {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake::new(Types::String, token_value));
+                tokens.push(Snowflake::new(Types::String, token_value + "\""));
                 pos += 1;
             }
             '\'' => {
-                let mut token_value = "".to_string();
+                let mut token_value = '"'.to_string();
                 while pos + 1 < file.len() && chars[pos + 1] != '\'' {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake::new(Types::String, token_value));
+                tokens.push(Snowflake::new(Types::String, token_value + "\""));
                 pos += 1;
             }
             '(' => tokens.push(Snowflake {
