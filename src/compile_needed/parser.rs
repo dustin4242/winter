@@ -9,7 +9,7 @@ pub fn run(tokens: &mut Vec<Snowflake>) -> String {
     while pos < tokens.len() {
         pos = token_handler(tokens, pos, &mut final_file) + 1;
     }
-    return final_file.join("\n") + "}\n";
+    return final_file.join("\n") + ";}\n";
 }
 
 fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<String>) -> usize {
@@ -23,6 +23,7 @@ fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<S
             "const" => const_keyword::handler(pos, final_file),
             "use" => use_keyword::handler(tokens, pos),
             "export" => export_keyword::handler(tokens, pos, final_file),
+            "write" => write_keyword::handler(tokens, pos, final_file),
             _ => unreachable!(),
         },
         Types::Token(Word) => word::handler(tokens, pos, final_file),

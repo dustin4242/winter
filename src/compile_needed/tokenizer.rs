@@ -41,6 +41,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                 ":".to_string(),
             )),
             ',' => tokens.push(Snowflake::new(Types::Token(Comma), ",")),
+            '\n' => tokens.push(Snowflake::new(Types::Token(Newline), "")),
             '=' => tokens.push(Snowflake::new(Types::Token(Operator), "=")),
             '+' => tokens.push(Snowflake::new(Types::Token(Operator), "+")),
             '-' => tokens.push(Snowflake::new(Types::Token(Operator), "-")),

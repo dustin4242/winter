@@ -1,8 +1,7 @@
-use "print"
-
 // Added Comments Baby
 const hello = "Hello, world! "
 let world = 8
 world = 9 + 9
-print(hello)
-print(world)
+
+// Tal's Version of Output with Side-Effect of File Writing
+write("/dev/stdout", hello, world)

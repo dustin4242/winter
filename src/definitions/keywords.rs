@@ -25,6 +25,7 @@ pub enum Types {
 pub enum Token {
     Operator,
     Comma,
+    Newline,
     TypeAssignment,
     Word,
     Keyword,
@@ -59,7 +60,7 @@ impl Types {
 }
 
 pub fn keywords() -> Vec<String> {
-    vec!["let", "const", "use", "export"]
+    vec!["let", "const", "use", "export", "write"]
         .into_iter()
         .map(|x| x.to_string())
         .collect()
