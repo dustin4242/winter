@@ -23,6 +23,7 @@ fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<S
             _ => unreachable!(),
         },
         Types::Token(Word) => word::handler(tokens, pos, final_file),
+        Types::Token(Operator) => operator::handler(tokens, pos, final_file),
         _ => passthrough(tokens, final_file, pos),
     }
 }

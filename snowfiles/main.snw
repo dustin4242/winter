@@ -1,6 +1,6 @@
 // Added Comments Baby
-const hello = "Hello, world! "
-let world = 8
+const hello = "Hello, world!" + " "
+let world = 9
 world = 9 + 9
 
 // Tal's Version of Output with Side-Effect of File Writing

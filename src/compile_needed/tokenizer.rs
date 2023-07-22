@@ -16,7 +16,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake::new(Types::String, token_value + "\""));
+                tokens.push(Snowflake::new(Types::String, token_value + "\".to_owned()"));
                 pos += 1;
             }
             '\'' => {
@@ -25,7 +25,7 @@ pub fn run(file: String) -> Vec<Snowflake> {
                     pos += 1;
                     token_value.push(chars[pos]);
                 }
-                tokens.push(Snowflake::new(Types::String, token_value + "\""));
+                tokens.push(Snowflake::new(Types::String, token_value + "\".to_owned()"));
                 pos += 1;
             }
             '(' => tokens.push(Snowflake {
