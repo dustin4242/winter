@@ -14,7 +14,7 @@ pub fn handler(tokens: &mut Vec<Snowflake>, mut pos: usize, final_file: &mut Vec
     final_file.push(format!(
         ";std::fs::write(\"{}\",format!(\"{}\",{}))",
         args.remove(0),
-        "{}".to_string() + ",{}".to_owned().repeat(args.len() - 1).as_str(),
+        "{}".to_string() + "{}".to_owned().repeat(args.len() - 1).as_str(),
         args.join(",")
     ));
     pos
