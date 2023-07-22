@@ -10,8 +10,8 @@ hi def link types Type
 hi def link word Macro
 
 syn keyword assignmentKeywords let const
-syn keyword keywords use export
-syn keyword types string
+syn keyword keywords use export write
+syn keyword types string i8 i16 i32
 syn match word '\a\a*' contained
 syn match Number '[0-9]'
 syn match Operator '[\+\-\*\/]'
