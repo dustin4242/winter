@@ -18,7 +18,7 @@ fn token_handler(tokens: &mut Vec<Snowflake>, pos: usize, final_file: &mut Vec<S
             "let" => let_keyword::handler(pos, final_file),
             "const" => const_keyword::handler(pos, final_file),
             "use" => use_keyword::handler(tokens, pos),
-            "export" => export_keyword::handler(tokens, pos, final_file),
+            "rust" => rust_keyword::handler(tokens, pos, final_file),
             "write" => write_keyword::handler(tokens, pos, final_file),
             _ => unreachable!(),
         },

@@ -60,7 +60,7 @@ impl Types {
 }
 
 pub fn keywords() -> Vec<String> {
-    vec!["let", "const", "use", "export", "write"]
+    vec!["let", "const", "use", "rust", "write"]
         .into_iter()
         .map(|x| x.to_string())
         .collect()
