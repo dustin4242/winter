@@ -23,7 +23,7 @@ fn handle_token(token: &Token) -> String {
                 }
             )
         }
-        TI::TokenType(TT::I32) | TI::TokenType(TT::String) => {
+        TI::TokenType(TT::i32) | TI::TokenType(TT::string) => {
             token.value.as_ref().unwrap().to_owned()
         }
         TI::Add | TI::Subtract | TI::Multiply | TI::Divide => expand_token(token),
@@ -141,7 +141,7 @@ fn expand_token(token: &Token) -> String {
             }
         }
         TI::Comma => ",".to_string(),
-        TI::TokenType(TT::String) => token.value.as_ref().unwrap().to_owned(),
+        TI::TokenType(TT::string) => token.value.as_ref().unwrap().to_owned(),
         _ => handle_token(token),
     }
 }

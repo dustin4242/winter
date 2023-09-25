@@ -112,7 +112,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                 new_char = chars.remove(0);
             }
             Some(Token::new(
-                TI::TokenType(TT::String),
+                TI::TokenType(TT::string),
                 Some(string + "\".to_string()"),
                 None,
             ))
@@ -163,7 +163,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     next_char = chars.remove(0);
                 }
                 chars.insert(0, next_char);
-                Some(Token::new(TI::TokenType(TT::I32), Some(number), None))
+                Some(Token::new(TI::TokenType(TT::i32), Some(number), None))
             } else if is_alphanumerical(c) {
                 let mut token_value = String::new();
                 let mut next_char = Some(&c);

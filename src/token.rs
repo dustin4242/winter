@@ -57,7 +57,8 @@ pub enum TokenIdentifier {
     TokenType(TokenType),
 }
 #[derive(Debug, PartialEq)]
+#[allow(non_camel_case_types)]
 pub enum TokenType {
-    String,
-    I32,
+    string,
+    i32,
 }
