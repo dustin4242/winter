@@ -1,24 +1,29 @@
-mod compile_needed;
-mod definitions;
-mod error_checking;
-use std::{
-    env,
-    fs::{read_to_string, write},
-    io::Error,
-};
+mod lexer;
+mod parser;
+mod token;
 
-fn main() -> Result<(), Error> {
-    let filename = env::args().nth(1).expect("file not provided");
-    if !filename.ends_with(".snw") {
-        panic!("file \"{filename}\" is not a valid snw file")
-    };
-    let file = read_to_string("./".to_string() + &filename)?;
-    let mut tokens = compile_needed::tokenizer::run(file);
-    error_checking::artemis::hunt(&tokens);
-    let final_file = compile_needed::parser::run(&mut tokens);
-    write(
-        filename.split(".").nth(0).unwrap().to_string() + ".rs",
-        final_file,
-    )?;
-    Ok(())
+fn main() {
+    let mut args = std::env::args();
+    let filename = args.nth(1).unwrap();
+    if filename.ends_with(".snw") {
+        let file = std::fs::read_to_string(format!("{}", filename)).unwrap();
+        let tokens = lexer::lex(file);
+        if args.nth(0).unwrap_or("".to_string()) == "-t" {
+            for token in &tokens {
+                token.print(0);
+            }
+        }
+        let final_file = format!(
+            "#[allow(unused_variables,unused_mut,redundant_semicolons,unused_must_use)]fn main(){{{}}}",
+            parser::parse(tokens)
+        );
+        if args.nth(0).unwrap_or("".to_string()) == "-p" {
+            println!("{final_file}");
+        }
+        std::fs::write(
+            format!("{}.rs", filename.split(".snw").nth(0).unwrap()),
+            final_file,
+        )
+        .unwrap()
+    }
 }

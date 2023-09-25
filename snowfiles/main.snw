@@ -1,7 +1,6 @@
-// Added Comments Baby
-const hello = "Hello, world!" + " "
-let world = 9
-world = 9 + 9
+function a(b: string): string
+	let a = "hello " + b
+	return a
+end
 
-// Tal's Version of Output with Side-Effect of File Writing
-write("/dev/stdout", hello, world)
+write("/dev/stdout", a("world"))
