@@ -23,7 +23,28 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
         '\t' | ' ' => parse_token(chars, tokens, scope),
         ',' => Some(Token::new(TI::Comma, None, None)),
         '\n' => Some(Token::new(TI::Newline, None, None)),
-        '+' | '-' | '/' | '*' => {
+        '/' => {
+            let next_char = chars.remove(0);
+            if next_char == '/' {
+                loop {
+                    if chars.get(0).unwrap() == &'\n' {
+                        break Some(tokens.pop().unwrap_or(Token::new(TI::Comment, None, None)));
+                    } else {
+                        chars.remove(0);
+                    }
+                }
+            } else {
+                chars.insert(0, next_char);
+                let previous_token = tokens.pop().unwrap();
+                Some(Token::new(TI::Divide, Some(format!("{char}")), {
+                    let mut new_tokens: Vec<Token> = vec![previous_token];
+                    let new_token = parse_token(chars, &mut new_tokens, scope);
+                    new_tokens.push(new_token.unwrap());
+                    Some(new_tokens)
+                }))
+            }
+        }
+        '+' | '-' | '*' => {
             let previous_token = tokens.pop().unwrap();
             Some(Token::new(
                 match char {

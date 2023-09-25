@@ -8,8 +8,8 @@ I am currently working on winter however to get it up to speed on SusCoding I am
 -   [ ] Add If
     -   [ ] Add Elif Statement
     -   [ ] Add Else Statement
--   [ ] Add Function
-    -   [ ] Passing Variables Into Functions
+-   [x] Add Function
+    -   [x] Passing Variables Into Functions
 -   [x] Add Int Numbers
     -   [x] Add Arithmetic Sequences
     -   [x] Add Subtraction, Multiplying, And Division

@@ -53,6 +53,7 @@ pub enum TokenIdentifier {
     Subtract,
     Multiply,
     Divide,
+    Comment,
     TokenType(TokenType),
 }
 #[derive(Debug, PartialEq)]

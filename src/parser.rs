@@ -1,6 +1,6 @@
 use crate::token::{Token, TokenIdentifier as TI, TokenType as TT};
 
-pub fn parse(tokens: Vec<Token>) -> String {
+pub fn parse(tokens: &Vec<Token>) -> String {
     let mut final_file = String::new();
     for token in tokens {
         final_file.push_str(&handle_token(&token))
