@@ -135,7 +135,8 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                         function_arguments.push(next_token.unwrap());
                         next_token = parse_token(chars, function_arguments, scope);
                     }
-                    next_token = parse_token(chars, tokens, scope);
+                    next_token = parse_token(chars, &mut Vec::new(), scope);
+                    println!("{next_token:?}");
                     if next_token.as_ref().unwrap().token_type == TI::TypeAssign {
                         let token = next_token.unwrap();
                         function_arguments.push(token);

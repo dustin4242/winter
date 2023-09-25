@@ -1,1 +1,1 @@
-#[allow(unused_variables,unused_mut,redundant_semicolons,unused_must_use)]fn main(){fn a(b: String) {;let mut a = "hello ".to_string() + &b;return a;};;std::fs::write("/dev/stdout".to_string(),a("world".to_string()));}
+#[allow(unused_variables,unused_mut,redundant_semicolons,unused_must_use)]fn main(){;fn a(b: String)->String {;let mut a = "hello ".to_string() + &b;return a;};;std::fs::write("/dev/stdout".to_string(),a("world".to_string()));}
