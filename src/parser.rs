@@ -13,7 +13,15 @@ fn handle_token(token: &Token) -> String {
         TI::Variable => handle_variable(token),
         TI::TypeAssign => {
             let children = token.children.as_ref().unwrap();
-            format!(": {}", children.get(0).unwrap().value.as_ref().unwrap())
+            let type_string = children.get(0).unwrap().value.as_ref().unwrap();
+            format!(
+                ":{}",
+                match type_string.as_str() {
+                    "string" => "String",
+                    "i32" => "i32",
+                    x => panic!("Unknown Type: {x}"),
+                }
+            )
         }
         TI::TokenType(TT::I32) | TI::TokenType(TT::String) => {
             token.value.as_ref().unwrap().to_owned()
@@ -34,12 +42,12 @@ fn handle_variable(token: &Token) -> String {
     let child_identifier = children.get(0).unwrap();
     let string = match child_identifier.token_type {
         TI::Let => format!(
-            "let mut {} = {};",
+            "let mut {}={};",
             token.value.as_ref().unwrap(),
             expand_token(children.get(1).unwrap())
         ),
         TI::Const => format!(
-            "let {} = {};",
+            "let {}={};",
             token.value.as_ref().unwrap(),
             expand_token(children.get(1).unwrap())
         ),
@@ -56,15 +64,10 @@ fn handle_variable(token: &Token) -> String {
                 .token_type
                 == TI::TypeAssign
             {
-                let type_assign_children = function_arguments
-                    .remove(function_arguments.len() - 1)
-                    .children
-                    .as_ref()
-                    .unwrap();
-                Some(format!(
-                    "->{}",
-                    type_assign_children.get(0).unwrap().value.as_ref().unwrap()
-                ))
+                let type_assign = function_arguments.remove(function_arguments.len() - 1);
+                let mut expanded_type = handle_token(type_assign);
+                expanded_type.replace_range(..1, "");
+                Some(format!("->{}", expanded_type))
             } else {
                 None
             };
@@ -81,7 +84,7 @@ fn handle_variable(token: &Token) -> String {
                 function_code += handle_token(token).as_str();
             }
             format!(
-                "fn {}({}){} {{{}}}",
+                "fn {}({}){}{{{}}}",
                 function_name,
                 expanded_arguments,
                 function_return_type.unwrap_or("".to_string()),
@@ -121,7 +124,7 @@ fn expand_token(token: &Token) -> String {
             let child_1 = children.get(0).unwrap();
             let child_2 = children.get(1).unwrap();
             format!(
-                "{} {} &{}",
+                "{}{}&{}",
                 expand_token(&child_1),
                 token.value.as_ref().unwrap(),
                 expand_token(&child_2)

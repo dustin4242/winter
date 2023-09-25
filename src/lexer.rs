@@ -196,7 +196,6 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                         None,
                         Some(vec![parse_token(chars, tokens, scope).unwrap()]),
                     )),
-                    "string" => Some(Token::new(TI::Variable, Some("String".to_string()), None)),
                     _ => Some(Token::new(TI::Variable, Some(token_value), None)),
                 }
             } else {
