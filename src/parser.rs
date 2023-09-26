@@ -29,6 +29,14 @@ fn handle_token(token: &Token) -> String {
                 }
             )
         }
+        TI::Array => {
+            let array_contents = get_code(token.children.as_ref().unwrap());
+            format!("vec![{}]", array_contents)
+        }
+        TI::ArrayIndex => {
+            let array_contents = get_code(token.children.as_ref().unwrap());
+            format!("[{}]", array_contents)
+        }
         TI::TokenType(TT::i32) | TI::TokenType(TT::string) => {
             token.value.as_ref().unwrap().to_owned()
         }
@@ -37,7 +45,7 @@ fn handle_token(token: &Token) -> String {
         TI::Newline => ";".to_string(),
         TI::Return => {
             let return_token = token.children.as_ref().unwrap().get(0).unwrap();
-            format!("return {}", expand_token(return_token))
+            format!("return ({}).to_owned()", expand_token(return_token))
         }
         _ => "".to_string(),
     }
@@ -112,6 +120,16 @@ fn handle_variable(token: &Token) -> String {
             };
             format!("{function_name}({expanded_arguments})")
         }
+        TI::ArrayIndex => {
+            let token_string = format!(
+                "{}[{}]={};",
+                token.value.as_ref().unwrap(),
+                get_code(child_identifier.children.as_ref().unwrap()),
+                get_code(&children.get(1..children.len()).unwrap().to_vec())
+            );
+            println!("{}", token_string);
+            token_string
+        }
         _ => format!(
             "{}={};",
             token.value.as_ref().unwrap(),
@@ -134,7 +152,7 @@ fn handle_if(token: &Token) -> String {
 fn get_code(children: &Vec<Token>) -> String {
     let mut code = String::new();
     for token in children {
-        code += handle_token(token).as_str();
+        code += &handle_token(token);
     }
     code
 }
@@ -146,7 +164,7 @@ fn expand_token(token: &Token) -> String {
             let child_1 = children.get(0).unwrap();
             let child_2 = children.get(1).unwrap();
             format!(
-                "{}{}&{}",
+                "{}.to_owned(){}&{}",
                 expand_token(&child_1),
                 token.value.as_ref().unwrap(),
                 expand_token(&child_2)
@@ -171,8 +189,9 @@ fn expand_token(token: &Token) -> String {
             let children = token.children.as_ref();
             match children {
                 Some(c) => {
-                    let child = c.get(0).unwrap();
-                    format!("{}{}", token.value.as_ref().unwrap(), handle_token(child))
+                    let code = get_code(c);
+                    println!("{code:?}");
+                    format!("{}{}", token.value.as_ref().unwrap(), code)
                 }
                 None => token.value.as_ref().unwrap().to_owned(),
             }

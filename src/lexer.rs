@@ -116,12 +116,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     Some(vec![previous_token, next_token]),
                 ))
             } else {
-                let mut new_tokens: Vec<Token> = Vec::new();
-                let mut new_token = parse_token(chars, &mut new_tokens, scope).unwrap();
-                while new_token.token_type != TI::Newline {
-                    new_tokens.push(new_token);
-                    new_token = parse_token(chars, &mut new_tokens, scope).unwrap();
-                }
+                let new_tokens = get_until(chars, scope, TI::Newline);
                 let mut previous_token = tokens.pop().unwrap();
                 let mut children = match &previous_token.children {
                     Some(_) => previous_token.children,
@@ -147,6 +142,24 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                 None,
             ))
         }
+        '[' => {
+            let previous_token = tokens.pop();
+            let array_contents = get_until(chars, scope, TI::ArrayClose);
+            match previous_token {
+                Some(mut t) => {
+                    if t.token_type == TI::Variable {
+                        t.children =
+                            Some(vec![Token::new(TI::ArrayIndex, None, Some(array_contents))]);
+                        Some(t)
+                    } else {
+                        tokens.push(t);
+                        Some(Token::new(TI::Array, None, Some(array_contents)))
+                    }
+                }
+                None => Some(Token::new(TI::Array, None, Some(array_contents))),
+            }
+        }
+        ']' => Some(Token::new(TI::ArrayClose, None, None)),
         '(' => {
             let mut previous_token = tokens.pop().unwrap();
             match previous_token.token_type {
@@ -174,12 +187,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                             let token = next_token.unwrap();
                             function_arguments.push(token);
                         }
-                        let mut function_tokens = Vec::new();
-                        let mut next_token = parse_token(chars, &mut function_tokens, scope);
-                        while next_token != Some(Token::new(TI::End, None, None)) {
-                            function_tokens.push(next_token.unwrap());
-                            next_token = parse_token(chars, &mut function_tokens, scope);
-                        }
+                        let function_tokens = get_until(chars, scope, TI::End);
                         let function = function_arguments.get_mut(0).unwrap();
                         function.children = Some(function_tokens);
                     }
@@ -233,7 +241,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     "return" => Some(Token::new(
                         TI::Return,
                         None,
-                        Some(vec![parse_token(chars, tokens, scope).unwrap()]),
+                        Some(get_until(chars, scope, TI::Newline)),
                     )),
                     "while" => Some(Token::new(TI::While, None, Some(Vec::new()))),
                     "if" => Some(Token::new(TI::If, None, Some(Vec::new()))),
@@ -283,4 +291,13 @@ fn handle_if(
         }
         _ => Some(previous_token),
     }
+}
+fn get_until(chars: &mut Vec<char>, scope: usize, endline: TI) -> Vec<Token> {
+    let mut new_tokens: Vec<Token> = Vec::new();
+    let mut new_token = parse_token(chars, &mut new_tokens, scope).unwrap();
+    while new_token.token_type != endline {
+        new_tokens.push(new_token);
+        new_token = parse_token(chars, &mut new_tokens, scope).unwrap();
+    }
+    new_tokens
 }
