@@ -184,7 +184,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                         function.children = Some(function_tokens);
                     }
                 }
-                TI::Elif | TI::If => {
+                TI::While | TI::Elif | TI::If => {
                     previous_token = handle_if(chars, tokens, scope, previous_token).unwrap();
                 }
                 _ => (),
@@ -235,6 +235,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                         None,
                         Some(vec![parse_token(chars, tokens, scope).unwrap()]),
                     )),
+                    "while" => Some(Token::new(TI::While, None, Some(Vec::new()))),
                     "if" => Some(Token::new(TI::If, None, Some(Vec::new()))),
                     "elif" => Some(Token::new(TI::Elif, None, Some(Vec::new()))),
                     "else" => handle_if(

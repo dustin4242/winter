@@ -1,16 +1,24 @@
 //Example Comment
 function a(b: i32): string
-	let a = "hello2\n"
+	let a = "hello2"
 	if(b == 1)
-		a = "hello world" + "\n"
+		a = "hello world"
 	elif(b != 2)
-		a = "hello" + "\n"
+		let x = 0
+		while(x != 2)
+			println("hello")
+			x = x + 1
+		end
 	else
 		//Empty
 	end
 	return a
 end
 
-write("/dev/stdout", a(0))
-write("/dev/stdout", a(1))
-write("/dev/stdout", a(2))
+println(a(0))
+println(a(1))
+println(a(2))
+
+function println(input: string)
+	write("/dev/stdout", input + "\n")
+end

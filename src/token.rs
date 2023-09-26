@@ -42,6 +42,7 @@ pub enum TokenIdentifier {
     Const,
     TypeAssign,
     Function,
+    While,
     If,
     Elif,
     Else,

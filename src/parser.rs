@@ -11,7 +11,7 @@ pub fn parse(tokens: &Vec<Token>) -> String {
 fn handle_token(token: &Token) -> String {
     match token.token_type {
         TI::Variable => handle_variable(token),
-        TI::Elif | TI::If => handle_if(token),
+        TI::While | TI::Elif | TI::If => handle_if(token),
         TI::Else => {
             let children = token.children.as_ref().unwrap();
             let else_code = get_code(&children);
@@ -125,6 +125,7 @@ fn handle_if(token: &Token) -> String {
     let bool_expand = expand_token(children.get(0).unwrap());
     let if_code = get_code(&children.get(1..children.len()).unwrap().to_vec());
     match token.token_type {
+        TI::While => format!("while {bool_expand}{{{if_code}}}"),
         TI::If => format!("if {bool_expand}{{{if_code}}}"),
         TI::Elif => format!("else if {bool_expand}{{{if_code}}}"),
         _ => unreachable!(),
