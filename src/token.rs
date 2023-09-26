@@ -57,6 +57,7 @@ pub enum TokenIdentifier {
     Multiply,
     Divide,
     EqualTo,
+    NotEqualTo,
     Comment,
     TokenType(TokenType),
 }

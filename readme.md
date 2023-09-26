@@ -16,6 +16,6 @@ I am currently working on winter however to get it up to speed on SusCoding I am
 -   [ ] Add Arrays
     -   [ ] Add Array To Types
 -   [x] Add Comments
--   [ ] Add Not Equal
+-   [x] Add Not Equal
 -   [ ] Add While Loop
 

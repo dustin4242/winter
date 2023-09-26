@@ -91,6 +91,20 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                 )),
             }
         }
+        '!' => {
+            if *chars.get(0).unwrap() == '=' {
+                chars.remove(0);
+                let previous_token = tokens.pop().unwrap();
+                let next_token = parse_token(chars, tokens, scope).unwrap();
+                Some(Token::new(
+                    TI::NotEqualTo,
+                    None,
+                    Some(vec![previous_token, next_token]),
+                ))
+            } else {
+                panic!("Unfinished Not Equals")
+            }
+        }
         '=' => {
             if *chars.get(0).unwrap() == '=' {
                 chars.remove(0);

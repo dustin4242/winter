@@ -151,11 +151,20 @@ fn expand_token(token: &Token) -> String {
                 expand_token(&child_2)
             )
         }
-        TI::EqualTo => {
+        TI::EqualTo | TI::NotEqualTo => {
             let children = token.children.as_ref().unwrap();
             let child_1 = children.get(0).unwrap();
             let child_2 = children.get(1).unwrap();
-            format!("{}=={}", expand_token(&child_1), expand_token(&child_2))
+            format!(
+                "{}{}{}",
+                expand_token(&child_1),
+                match token.token_type {
+                    TI::EqualTo => "==",
+                    TI::NotEqualTo => "!=",
+                    _ => "",
+                },
+                expand_token(&child_2)
+            )
         }
         TI::Variable => {
             let children = token.children.as_ref();

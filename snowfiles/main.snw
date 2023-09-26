@@ -1,10 +1,10 @@
 //Example Comment
 function a(b: i32): string
-	let a = "hello\n"
+	let a = "hello2\n"
 	if(b == 1)
 		a = "hello world" + "\n"
-	elif(b == 2)
-		a = "hello2" + "\n"
+	elif(b != 2)
+		a = "hello" + "\n"
 	else
 		//Empty
 	end
