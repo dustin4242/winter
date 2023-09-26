@@ -5,8 +5,8 @@ I am currently working on winter however to get it up to speed on SusCoding I am
 -   [x] Add Let
 -   [x] Add Const
 -   [x] Add Double Assignment
--   [ ] Add If
-    -   [ ] Add Elif Statement
+-   [x] Add If
+    -   [x] Add Elif Statement
     -   [ ] Add Else Statement
 -   [x] Add Function
     -   [x] Passing Variables Into Functions

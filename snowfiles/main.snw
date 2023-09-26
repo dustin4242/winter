@@ -1,7 +1,16 @@
 //Example Comment
-function a(b: string): string
-	let a = "hello " + b
+function a(b: i32): string
+	let a = "hello\n"
+	if(b == 1)
+		a = "hello world" + "\n"
+	elif(b == 2)
+		a = "hello2" + "\n"
+	else
+		//Empty
+	end
 	return a
 end
 
-write("/dev/stdout", a("world"))
+write("/dev/stdout", a(0))
+write("/dev/stdout", a(1))
+write("/dev/stdout", a(2))

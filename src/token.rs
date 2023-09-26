@@ -42,6 +42,9 @@ pub enum TokenIdentifier {
     Const,
     TypeAssign,
     Function,
+    If,
+    Elif,
+    Else,
     Call,
     CloseParen,
     Variable,
@@ -53,6 +56,7 @@ pub enum TokenIdentifier {
     Subtract,
     Multiply,
     Divide,
+    EqualTo,
     Comment,
     TokenType(TokenType),
 }

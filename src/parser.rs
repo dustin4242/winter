@@ -11,6 +11,7 @@ pub fn parse(tokens: &Vec<Token>) -> String {
 fn handle_token(token: &Token) -> String {
     match token.token_type {
         TI::Variable => handle_variable(token),
+        TI::Elif | TI::If => handle_if(token),
         TI::TypeAssign => {
             let children = token.children.as_ref().unwrap();
             let type_string = children.get(0).unwrap().value.as_ref().unwrap();
@@ -31,7 +32,7 @@ fn handle_token(token: &Token) -> String {
         TI::Newline => ";".to_string(),
         TI::Return => {
             let return_token = token.children.as_ref().unwrap().get(0).unwrap();
-            format!("return {}", return_token.value.as_ref().unwrap())
+            format!("return {}", expand_token(return_token))
         }
         _ => "".to_string(),
     }
@@ -107,14 +108,29 @@ fn handle_variable(token: &Token) -> String {
                 }
                 expansion
             };
-            format!("{}({})", function_name, expanded_arguments)
+            format!("{function_name}({expanded_arguments})")
         }
-        _ => panic!(
-            "Variable Type Not Defined In Parser: {:?}",
-            token.token_type
+        _ => format!(
+            "{}={};",
+            token.value.as_ref().unwrap(),
+            expand_token(child_identifier)
         ),
     };
     string
+}
+fn handle_if(token: &Token) -> String {
+    let children = token.children.as_ref().unwrap();
+    let bool_expand = expand_token(children.get(0).unwrap());
+    let if_tokens = children.get(1..children.len()).unwrap();
+    let mut if_code = String::new();
+    for token in if_tokens {
+        if_code += handle_token(token).as_str();
+    }
+    match token.token_type {
+        TI::If => format!("if {bool_expand} {{{if_code}}}"),
+        TI::Elif => format!("else if {bool_expand} {{{if_code}}}"),
+        _ => unreachable!(),
+    }
 }
 
 fn expand_token(token: &Token) -> String {
@@ -129,6 +145,12 @@ fn expand_token(token: &Token) -> String {
                 token.value.as_ref().unwrap(),
                 expand_token(&child_2)
             )
+        }
+        TI::EqualTo => {
+            let children = token.children.as_ref().unwrap();
+            let child_1 = children.get(0).unwrap();
+            let child_2 = children.get(1).unwrap();
+            format!("{}=={}", expand_token(&child_1), expand_token(&child_2))
         }
         TI::Variable => {
             let children = token.children.as_ref();
