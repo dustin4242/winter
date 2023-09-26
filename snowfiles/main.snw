@@ -1,12 +1,12 @@
 //Example Comment
 function a(b: i32): string
-	let a = "hello2"
+	let a = "hello"
 	if(b == 1)
-		a = "hello world"
+		a = "hello2"
 	elif(b != 2)
 		let x = 0
 		while(x != 2)
-			println("hello")
+			a = a + " world"
 			x = x + 1
 		end
 	else
