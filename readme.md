@@ -7,7 +7,7 @@ I am currently working on winter however to get it up to speed on SusCoding I am
 -   [x] Add Double Assignment
 -   [x] Add If
     -   [x] Add Elif Statement
-    -   [ ] Add Else Statement
+    -   [x] Add Else Statement
 -   [x] Add Function
     -   [x] Passing Variables Into Functions
 -   [x] Add Int Numbers

@@ -171,21 +171,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     }
                 }
                 TI::Elif | TI::If => {
-                    let mut if_code = Vec::new();
-                    let mut next_token = parse_token(chars, &mut if_code, scope);
-                    while next_token.as_ref().unwrap().token_type != TI::End
-                        && next_token.as_ref().unwrap().token_type != TI::Elif
-                    {
-                        if_code.push(next_token.unwrap());
-                        next_token = parse_token(chars, &mut if_code, scope);
-                    }
-                    for token in if_code {
-                        previous_token.children.as_mut().unwrap().push(token);
-                    }
-                    if next_token.as_ref().unwrap().token_type == TI::Elif {
-                        tokens.push(previous_token);
-                        return next_token;
-                    }
+                    previous_token = handle_if(chars, tokens, scope, previous_token).unwrap();
                 }
                 _ => (),
             }
@@ -237,7 +223,12 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     )),
                     "if" => Some(Token::new(TI::If, None, Some(Vec::new()))),
                     "elif" => Some(Token::new(TI::Elif, None, Some(Vec::new()))),
-                    "else" => Some(Token::new(TI::Else, None, None)),
+                    "else" => handle_if(
+                        chars,
+                        tokens,
+                        scope,
+                        Token::new(TI::Else, None, Some(Vec::new())),
+                    ),
                     _ => Some(Token::new(TI::Variable, Some(token_value), None)),
                 }
             } else {
@@ -251,4 +242,30 @@ fn is_number(char: char) -> bool {
 }
 fn is_alphanumerical(char: char) -> bool {
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".contains(char)
+}
+fn handle_if(
+    chars: &mut Vec<char>,
+    tokens: &mut Vec<Token>,
+    scope: usize,
+    mut previous_token: Token,
+) -> Option<Token> {
+    let mut if_code = Vec::new();
+    let mut next_token = parse_token(chars, &mut if_code, scope);
+    while next_token.as_ref().unwrap().token_type != TI::End
+        && next_token.as_ref().unwrap().token_type != TI::Elif
+        && next_token.as_ref().unwrap().token_type != TI::Else
+    {
+        if_code.push(next_token.unwrap());
+        next_token = parse_token(chars, &mut if_code, scope);
+    }
+    for token in if_code {
+        previous_token.children.as_mut().unwrap().push(token);
+    }
+    match next_token.as_ref().unwrap().token_type {
+        TI::Elif | TI::Else => {
+            tokens.push(previous_token);
+            return next_token;
+        }
+        _ => Some(previous_token),
+    }
 }

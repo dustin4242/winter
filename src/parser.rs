@@ -12,6 +12,11 @@ fn handle_token(token: &Token) -> String {
     match token.token_type {
         TI::Variable => handle_variable(token),
         TI::Elif | TI::If => handle_if(token),
+        TI::Else => {
+            let children = token.children.as_ref().unwrap();
+            let else_code = get_code(&children);
+            format!("else{{{else_code}}}")
+        }
         TI::TypeAssign => {
             let children = token.children.as_ref().unwrap();
             let type_string = children.get(0).unwrap().value.as_ref().unwrap();
@@ -80,10 +85,7 @@ fn handle_variable(token: &Token) -> String {
                 expansion
             };
             let function_tokens = children.get(0).as_ref().unwrap().children.as_ref().unwrap();
-            let mut function_code = String::new();
-            for token in function_tokens {
-                function_code += handle_token(token).as_str();
-            }
+            let function_code = get_code(function_tokens);
             format!(
                 "fn {}({}){}{{{}}}",
                 function_name,
@@ -121,16 +123,19 @@ fn handle_variable(token: &Token) -> String {
 fn handle_if(token: &Token) -> String {
     let children = token.children.as_ref().unwrap();
     let bool_expand = expand_token(children.get(0).unwrap());
-    let if_tokens = children.get(1..children.len()).unwrap();
-    let mut if_code = String::new();
-    for token in if_tokens {
-        if_code += handle_token(token).as_str();
-    }
+    let if_code = get_code(&children.get(1..children.len()).unwrap().to_vec());
     match token.token_type {
-        TI::If => format!("if {bool_expand} {{{if_code}}}"),
-        TI::Elif => format!("else if {bool_expand} {{{if_code}}}"),
+        TI::If => format!("if {bool_expand}{{{if_code}}}"),
+        TI::Elif => format!("else if {bool_expand}{{{if_code}}}"),
         _ => unreachable!(),
     }
+}
+fn get_code(children: &Vec<Token>) -> String {
+    let mut code = String::new();
+    for token in children {
+        code += handle_token(token).as_str();
+    }
+    code
 }
 
 fn expand_token(token: &Token) -> String {

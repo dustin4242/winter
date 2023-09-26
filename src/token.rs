@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Token {
     pub token_type: TokenIdentifier,
     pub value: Option<String>,
@@ -36,7 +36,7 @@ impl Token {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum TokenIdentifier {
     Let,
     Const,
@@ -60,7 +60,7 @@ pub enum TokenIdentifier {
     Comment,
     TokenType(TokenType),
 }
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 #[allow(non_camel_case_types)]
 pub enum TokenType {
     string,
