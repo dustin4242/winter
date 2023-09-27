@@ -9,7 +9,7 @@ fn main() {
         let file = std::fs::read_to_string(format!("{}", filename)).unwrap();
         let tokens = lexer::lex(file);
         let final_file = format!(
-            "#[allow(unused_variables,unused_mut,redundant_semicolons,unused_must_use)]fn main(){{{}}}",
+            "#[allow(unused_variables,unused_mut,redundant_semicolons,unused_must_use,non_snake_case)]fn main(){{{}}}",
             parser::parse(&tokens)
         );
         for _ in 0..args.len() {
