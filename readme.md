@@ -13,9 +13,10 @@ I am currently working on winter however to get it up to speed on SusCoding I am
 -   [x] Add Int Numbers
     -   [x] Add Arithmetic Sequences
     -   [x] Add Subtraction, Multiplying, And Division
--   [x] Add Arrays
-    -   [x] Add Indexing Arrays
-    -   [ ] Add Array To Types
+bugfix:
+    -   [x] Add Arrays
+        -   [x] Add Indexing Arrays
+        -   [ ] Add Array To Types
 -   [x] Add Comments
 -   [x] Add Not Equal
 -   [x] Add While Loop
