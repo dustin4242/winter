@@ -25,7 +25,7 @@ fn handle_token(token: &Token) -> String {
                 match type_string.as_str() {
                     "string" => "String",
                     "i32" => "i32",
-                    x => panic!("Unknown Type: {x}"),
+                    x => x,
                 }
             )
         }
@@ -52,90 +52,96 @@ fn handle_token(token: &Token) -> String {
 }
 
 fn handle_variable(token: &Token) -> String {
-    let children = token.children.as_ref().unwrap();
-    let child_identifier = children.get(0).unwrap();
-    let string = match child_identifier.token_type {
-        TI::Let => format!(
-            "let mut {}={};",
-            token.value.as_ref().unwrap(),
-            expand_token(children.get(1).unwrap())
-        ),
-        TI::Const => format!(
-            "let {}={};",
-            token.value.as_ref().unwrap(),
-            expand_token(children.get(1).unwrap())
-        ),
-        TI::Function => {
-            let function_name = token.value.as_ref().unwrap();
-            let children = token.children.as_ref().unwrap();
-            let mut function_arguments = Vec::new();
-            for x in 1..children.len() {
-                function_arguments.push(children.get(x).unwrap());
-            }
-            let function_return_type = if function_arguments
-                .get(function_arguments.len() - 1)
-                .unwrap()
-                .token_type
-                == TI::TypeAssign
-            {
-                let type_assign = function_arguments.remove(function_arguments.len() - 1);
-                let mut expanded_type = handle_token(type_assign);
-                expanded_type.replace_range(..1, "");
-                Some(format!("->{}", expanded_type))
-            } else {
-                None
-            };
-            let expanded_arguments = {
-                let mut expansion = String::new();
-                for token in function_arguments.to_owned() {
-                    expansion.push_str(&expand_token(token));
+    match token.children.as_ref() {
+        Some(c) => {
+            let children = c;
+            let child_identifier = children.get(0).unwrap();
+            let string = match child_identifier.token_type {
+                TI::Let => format!(
+                    "let mut {}={};",
+                    token.value.as_ref().unwrap(),
+                    expand_token(children.get(1).unwrap())
+                ),
+                TI::Const => format!(
+                    "let {}={};",
+                    token.value.as_ref().unwrap(),
+                    expand_token(children.get(1).unwrap())
+                ),
+                TI::Function => {
+                    let function_name = token.value.as_ref().unwrap();
+                    let children = token.children.as_ref().unwrap();
+                    let mut function_arguments = Vec::new();
+                    for x in 1..children.len() {
+                        function_arguments.push(children.get(x).unwrap());
+                    }
+                    let function_return_type = if function_arguments
+                        .get(function_arguments.len() - 1)
+                        .unwrap()
+                        .token_type
+                        == TI::TypeAssign
+                    {
+                        let type_assign = function_arguments.remove(function_arguments.len() - 1);
+                        let mut expanded_type = handle_token(type_assign);
+                        expanded_type.replace_range(..1, "");
+                        Some(format!("->{}", expanded_type))
+                    } else {
+                        None
+                    };
+                    let expanded_arguments = {
+                        let mut expansion = String::new();
+                        for token in function_arguments.to_owned() {
+                            expansion.push_str(&expand_token(token));
+                        }
+                        expansion
+                    };
+                    let function_tokens =
+                        children.get(0).as_ref().unwrap().children.as_ref().unwrap();
+                    let function_code = get_code(function_tokens);
+                    format!(
+                        "fn {}({}){}{{{}}}",
+                        function_name,
+                        expanded_arguments,
+                        function_return_type.unwrap_or("".to_string()),
+                        function_code
+                    )
                 }
-                expansion
-            };
-            let function_tokens = children.get(0).as_ref().unwrap().children.as_ref().unwrap();
-            let function_code = get_code(function_tokens);
-            format!(
-                "fn {}({}){}{{{}}}",
-                function_name,
-                expanded_arguments,
-                function_return_type.unwrap_or("".to_string()),
-                function_code
-            )
-        }
-        TI::Call => {
-            let function_name = match token.value.as_ref().unwrap().as_str() {
-                "write" => "std::fs::write",
-                _ => token.value.as_ref().unwrap(),
-            };
-            let mut function_arguments = Vec::new();
-            for x in 1..children.len() {
-                function_arguments.push(children.get(x).unwrap());
-            }
-            let expanded_arguments = {
-                let mut expansion = String::new();
-                for token in function_arguments.to_owned() {
-                    expansion.push_str(&handle_token(token));
+                TI::Call => {
+                    let function_name = match token.value.as_ref().unwrap().as_str() {
+                        "write" => "std::fs::write",
+                        _ => token.value.as_ref().unwrap(),
+                    };
+                    let mut function_arguments = Vec::new();
+                    for x in 1..children.len() {
+                        function_arguments.push(children.get(x).unwrap());
+                    }
+                    let expanded_arguments = {
+                        let mut expansion = String::new();
+                        for token in function_arguments.to_owned() {
+                            expansion.push_str(&handle_token(token));
+                        }
+                        expansion
+                    };
+                    format!("{function_name}({expanded_arguments})")
                 }
-                expansion
+                TI::ArrayIndex => {
+                    let token_string = format!(
+                        "{}[{}]={};",
+                        token.value.as_ref().unwrap(),
+                        get_code(child_identifier.children.as_ref().unwrap()),
+                        get_code(&children.get(1..children.len()).unwrap().to_vec())
+                    );
+                    token_string
+                }
+                _ => format!(
+                    "{}={};",
+                    token.value.as_ref().unwrap(),
+                    expand_token(child_identifier)
+                ),
             };
-            format!("{function_name}({expanded_arguments})")
+            string
         }
-        TI::ArrayIndex => {
-            let token_string = format!(
-                "{}[{}]={};",
-                token.value.as_ref().unwrap(),
-                get_code(child_identifier.children.as_ref().unwrap()),
-                get_code(&children.get(1..children.len()).unwrap().to_vec())
-            );
-            token_string
-        }
-        _ => format!(
-            "{}={};",
-            token.value.as_ref().unwrap(),
-            expand_token(child_identifier)
-        ),
-    };
-    string
+        None => token.value.as_ref().unwrap().to_owned(),
+    }
 }
 fn handle_if(token: &Token) -> String {
     let children = token.children.as_ref().unwrap();

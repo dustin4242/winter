@@ -6,8 +6,8 @@ function a(b: i32): string
 	elif(b != 2)
 		let x = 0
 		a[0] = "hello" + " world"
-		while(x != 2)
-			a[0] = a[0] + a[0]
+		while(x != 1)
+			a[x] = a[0] + a[0]
 			x = x + 1
 		end
 	else
