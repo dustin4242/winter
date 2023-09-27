@@ -221,6 +221,12 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     x += 1;
                 }
                 chars.splice(0..x - 1, []);
+                if chars.get(0).unwrap() == &'[' {
+                    let mut array_contents =
+                        vec![Token::new(TI::Variable, Some(token_value.to_owned()), None)];
+                    let new_token = parse_token(chars, &mut array_contents, scope);
+                    return new_token;
+                }
                 match token_value.as_str() {
                     "let" => {
                         let mut parent = parse_token(chars, tokens, scope).unwrap();

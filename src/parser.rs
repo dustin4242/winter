@@ -127,7 +127,6 @@ fn handle_variable(token: &Token) -> String {
                 get_code(child_identifier.children.as_ref().unwrap()),
                 get_code(&children.get(1..children.len()).unwrap().to_vec())
             );
-            println!("{}", token_string);
             token_string
         }
         _ => format!(
@@ -190,7 +189,6 @@ fn expand_token(token: &Token) -> String {
             match children {
                 Some(c) => {
                     let code = get_code(c);
-                    println!("{code:?}");
                     format!("{}{}", token.value.as_ref().unwrap(), code)
                 }
                 None => token.value.as_ref().unwrap().to_owned(),

@@ -1,0 +1,43 @@
+const automataLength = 110
+
+// In this implementation you can change the numbers to any character
+const dead = " "
+const alive = "1"
+
+// Fill an array with dead cells
+let initArray = dead
+let i = 0
+while(i != automataLength - 2)
+	initArray = initArray + dead
+end
+
+initArray = initArray + alive
+initArray = initArray + dead
+println(initArray + "\n")
+
+// Height
+i = 0
+while(i != automataLength - 2)
+	let newArray = dead
+	// Width
+	let pos = 0
+	while(pos != automataLength - 1)
+		let analyze = initArray[pos] + initArray[pos + 1] + initArray[pos + 2]
+		if(analyze == dead + dead + dead)
+			newArray = newArray + dead
+		elif(analyze == alive + dead + dead)
+			newArray = newArray + dead
+		elif(analyze == alive + alive + alive)
+			newArray = newArray + dead
+		else
+			newArray = newArray + alive
+		end
+	end
+	newArray = newArray + dead
+	initArray = newArray
+	println(initArray + "\n")
+end
+
+function println(input: string)
+	write("/dev/stdout", input + "\n")
+end

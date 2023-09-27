@@ -7,7 +7,7 @@ function a(b: i32): string
 		let x = 0
 		a[0] = "hello" + " world"
 		while(x != 2)
-			a[0] = a[0] + " world"
+			a[0] = a[0] + a[0]
 			x = x + 1
 		end
 	else
