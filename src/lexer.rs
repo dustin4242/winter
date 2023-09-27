@@ -173,6 +173,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                             call_arguments.push(next_token);
                             next_token = parse_token(chars, &mut call_arguments, scope).unwrap();
                         }
+                        call_arguments.push(next_token);
                         previous_token.children = Some(call_arguments);
                     } else if children.as_ref().unwrap().get(0).unwrap().token_type == TI::Function
                     {
@@ -210,7 +211,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                     next_char = chars.remove(0);
                 }
                 chars.insert(0, next_char);
-                Some(Token::new(TI::TokenType(TT::i32), Some(number), None))
+                Some(Token::new(TI::TokenType(TT::number), Some(number), None))
             } else if is_alphanumerical(c) {
                 let mut token_value = String::new();
                 let mut next_char = Some(&c);
@@ -280,10 +281,14 @@ fn handle_if(
 ) -> Option<Token> {
     let mut if_code = Vec::new();
     let mut next_token = parse_token(chars, &mut if_code, scope);
-    while next_token.as_ref().unwrap().token_type != TI::End
-        && next_token.as_ref().unwrap().token_type != TI::Elif
-        && next_token.as_ref().unwrap().token_type != TI::Else
-    {
+    while match previous_token.token_type {
+        TI::While => next_token.as_ref().unwrap().token_type != TI::End,
+        _ => {
+            next_token.as_ref().unwrap().token_type != TI::End
+                && next_token.as_ref().unwrap().token_type != TI::Elif
+                && next_token.as_ref().unwrap().token_type != TI::Else
+        }
+    } {
         if_code.push(next_token.unwrap());
         next_token = parse_token(chars, &mut if_code, scope);
     }

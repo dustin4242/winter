@@ -24,25 +24,24 @@ fn handle_token(token: &Token) -> String {
                 ":{}",
                 match type_string.as_str() {
                     "string" => "String",
-                    "i32" => "i32",
+                    "number" => "usize",
                     x => x,
                 }
             )
         }
         TI::Array => {
-            let array_contents = get_code(token.children.as_ref().unwrap());
+            let array_contents = get_arguments(token.children.as_ref().unwrap());
             format!("vec![{}]", array_contents)
         }
         TI::ArrayIndex => {
-            let array_contents = get_code(token.children.as_ref().unwrap());
-            format!("[{}]", array_contents)
+            let array_contents = get_arguments(token.children.as_ref().unwrap());
+            format!(".get({}).unwrap().to_owned()", array_contents)
         }
-        TI::TokenType(TT::i32) | TI::TokenType(TT::string) => {
+        TI::TokenType(TT::number) | TI::TokenType(TT::string) => {
             token.value.as_ref().unwrap().to_owned()
         }
-        TI::Add | TI::Subtract | TI::Multiply | TI::Divide => expand_token(token),
         TI::Comma => ",".to_string(),
-        TI::Newline => ";".to_string(),
+        TI::Newline => ";\n".to_string(),
         TI::Return => {
             let return_token = token.children.as_ref().unwrap().get(0).unwrap();
             format!("return ({}).to_owned()", expand_token(return_token))
@@ -58,12 +57,12 @@ fn handle_variable(token: &Token) -> String {
             let child_identifier = children.get(0).unwrap();
             let string = match child_identifier.token_type {
                 TI::Let => format!(
-                    "let mut {}={};",
+                    "let mut {}={};\n",
                     token.value.as_ref().unwrap(),
                     expand_token(children.get(1).unwrap())
                 ),
                 TI::Const => format!(
-                    "let {}={};",
+                    "let {}={};\n",
                     token.value.as_ref().unwrap(),
                     expand_token(children.get(1).unwrap())
                 ),
@@ -107,35 +106,30 @@ fn handle_variable(token: &Token) -> String {
                 }
                 TI::Call => {
                     let function_name = match token.value.as_ref().unwrap().as_str() {
-                        "write" => "std::fs::write",
-                        _ => token.value.as_ref().unwrap(),
+                        "write" => "std::fs::write(".to_owned(),
+                        "push" => "Vec::push(&mut ".to_owned(),
+                        _ => format!("{}(", token.value.as_ref().unwrap()),
                     };
                     let mut function_arguments = Vec::new();
                     for x in 1..children.len() {
-                        function_arguments.push(children.get(x).unwrap());
+                        function_arguments.push(children.get(x).unwrap().to_owned());
                     }
-                    let expanded_arguments = {
-                        let mut expansion = String::new();
-                        for token in function_arguments.to_owned() {
-                            expansion.push_str(&handle_token(token));
-                        }
-                        expansion
-                    };
-                    format!("{function_name}({expanded_arguments})")
+                    let expanded_arguments = get_arguments(&function_arguments);
+                    format!("{function_name}{expanded_arguments}")
                 }
                 TI::ArrayIndex => {
                     let token_string = format!(
-                        "{}[{}]={};",
+                        "{}[{}]={};\n",
                         token.value.as_ref().unwrap(),
-                        get_code(child_identifier.children.as_ref().unwrap()),
-                        get_code(&children.get(1..children.len()).unwrap().to_vec())
+                        get_arguments(child_identifier.children.as_ref().unwrap()),
+                        get_arguments(&children.get(1..children.len()).unwrap().to_vec())
                     );
                     token_string
                 }
                 _ => format!(
-                    "{}={};",
+                    "{}={};\n",
                     token.value.as_ref().unwrap(),
-                    expand_token(child_identifier)
+                    get_arguments(children)
                 ),
             };
             string
@@ -158,6 +152,13 @@ fn get_code(children: &Vec<Token>) -> String {
     let mut code = String::new();
     for token in children {
         code += &handle_token(token);
+    }
+    code
+}
+fn get_arguments(children: &Vec<Token>) -> String {
+    let mut code = String::new();
+    for token in children {
+        code += &expand_token(token);
     }
     code
 }
@@ -190,11 +191,13 @@ fn expand_token(token: &Token) -> String {
                 expand_token(&child_2)
             )
         }
+        TI::Call => "(".to_owned(),
+        TI::CloseParen => ")".to_owned(),
         TI::Variable => {
             let children = token.children.as_ref();
             match children {
                 Some(c) => {
-                    let code = get_code(c);
+                    let code = get_arguments(c);
                     format!("{}{}", token.value.as_ref().unwrap(), code)
                 }
                 None => token.value.as_ref().unwrap().to_owned(),

@@ -1,17 +1,19 @@
 //Example Comment
 function a(b: i32): string
 	let a = ["hello"]
-	if(b == 1)
-		a[0] = "hello2"
-	elif(b != 2)
-		let x = 0
-		a[0] = "hello" + " world"
-		while(x != 1)
+	let x = 0
+	while(x != 1)
+		if(b == 1)
+			a[0] = "hello2"
+			x = x + 1
+		elif(b != 2)
+			a[0] = "hello" + " world"
 			a[x] = a[0] + a[0]
 			x = x + 1
-		end
-	else
+		else
 		//Empty
+			x = x + 1
+		end
 	end
 	return a[0]
 end
