@@ -1,6 +1,7 @@
 //Example Comment
 function a(b: i32): string
-	let a = ["hello"]
+	let hello = "hello"
+	let a = [hello]
 	let y = 1
 	let x = 0
 	while(x != y * 2 - 1)
@@ -8,7 +9,7 @@ function a(b: i32): string
 			a[0] = "hello2"
 			x = x + 1
 		elif(b != 2)
-			a[0] = "hello" + " world"
+			a[0] = hello + " world"
 			a[x] = a[0] + a[0]
 			x = x + 1
 		else

@@ -106,16 +106,22 @@ fn handle_variable(token: &Token) -> String {
                 }
                 TI::Call => {
                     let function_name = match token.value.as_ref().unwrap().as_str() {
-                        "write" => "std::fs::write(".to_owned(),
-                        "push" => "Vec::push(&mut ".to_owned(),
-                        _ => format!("{}(", token.value.as_ref().unwrap()),
+                        "write" => (1, "std::fs::write(".to_owned()),
+                        "push" => (
+                            2,
+                            format!(
+                                "Vec::push(&mut {}",
+                                children.get(1).as_ref().unwrap().value.as_ref().unwrap()
+                            ),
+                        ),
+                        _ => (1, format!("{}(", token.value.as_ref().unwrap())),
                     };
                     let mut function_arguments = Vec::new();
-                    for x in 1..children.len() {
+                    for x in function_name.0..children.len() {
                         function_arguments.push(children.get(x).unwrap().to_owned());
                     }
                     let expanded_arguments = get_arguments(&function_arguments);
-                    format!("{function_name}{expanded_arguments}")
+                    format!("{}{expanded_arguments}", function_name.1)
                 }
                 TI::ArrayIndex => {
                     let token_string = format!(
@@ -200,7 +206,7 @@ fn expand_token(token: &Token) -> String {
                     let code = get_arguments(c);
                     format!("{}{}", token.value.as_ref().unwrap(), code)
                 }
-                None => token.value.as_ref().unwrap().to_owned(),
+                None => format!("{}.to_owned()", token.value.as_ref().unwrap().to_owned()),
             }
         }
         TI::Comma => ",".to_string(),

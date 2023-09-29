@@ -1,17 +1,21 @@
 const automataLength = 110
 
+let aliveCell = "1"
+let deadCell = " "
+
 // Fill an array with dead cells
-let initArray = [" "]
+let initArray = [deadCell]
 let i = 0
 while(i != automataLength - 2)
-	push(initArray, " ")
+	push(initArray, deadCell)
 	i = i + 1
 end
-push(initArray, "1")
-push(initArray, " ")
+push(initArray, aliveCell)
+push(initArray, deadCell)
 
 let x = 0
-while(x != automataLength)
+print(initArray[0] + "\n")
+while(x != automataLength - 1)
 	print(initArray[x])
 	x = x + 1
 end
@@ -20,23 +24,23 @@ print("\n")
 // Height
 i = 0
 while(i != automataLength - 2)
-	let newArray = [" "]
+	let newArray = [deadCell]
 	// Width
 	let pos = 0
 	while(pos != automataLength - 1)
 		let analyze = initArray[pos] + initArray[pos + 1] + initArray[pos + 2]
-		if(analyze == " " + " " + " ")
-			push(newArray, " ")
-		elif(analyze == "1" + " " + " ")
-			push(newArray, " ")
-		elif(analyze == "1" + "1" + "1")
-			push(newArray, " ")
+		if(analyze == deadCell + deadCell + deadCell)
+			push(newArray, deadCell)
+		elif(analyze == aliveCell + deadCell + deadCell)
+			push(newArray, deadCell)
+		elif(analyze == aliveCell + aliveCell + aliveCell)
+			push(newArray, deadCell)
 		else
-			push(newArray, "1")
+			push(newArray, aliveCell)
 		end
 		pos = pos + 1
 	end
-	push(newArray, " ")
+	push(newArray, deadCell)
 	initArray = newArray
 	let x = 0
 	while(x != automataLength)
