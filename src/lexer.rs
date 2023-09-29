@@ -163,7 +163,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
         '(' => {
             let mut previous_token = tokens.pop().unwrap();
             match previous_token.token_type {
-                TI::Variable => {
+                TI::Variable | TI::Rust => {
                     let children = &previous_token.children;
                     if children == &None {
                         let mut call_arguments = vec![Token::new(TI::Call, None, None)];
@@ -250,6 +250,7 @@ fn parse_token(chars: &mut Vec<char>, tokens: &mut Vec<Token>, scope: usize) -> 
                         None,
                         Some(get_until(chars, scope, TI::Newline)),
                     )),
+                    "rust" => Some(Token::new(TI::Rust, None, None)),
                     "while" => Some(Token::new(TI::While, None, Some(Vec::new()))),
                     "if" => Some(Token::new(TI::If, None, Some(Vec::new()))),
                     "elif" => Some(Token::new(TI::Elif, None, Some(Vec::new()))),

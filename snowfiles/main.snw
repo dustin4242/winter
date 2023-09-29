@@ -20,6 +20,8 @@ function a(b: i32): string
 	return a[0]
 end
 
+rust("std::thread::sleep(std::time::Duration::from_millis(1000));")
+
 println(a(0))
 println(a(1))
 println(a(2))

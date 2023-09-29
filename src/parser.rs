@@ -46,7 +46,18 @@ fn handle_token(token: &Token) -> String {
             let return_token = token.children.as_ref().unwrap().get(0).unwrap();
             format!("return ({}).to_owned()", expand_token(return_token))
         }
-        _ => "".to_string(),
+        TI::Comment | TI::CloseParen => "".to_string(),
+        TI::Rust => {
+            let children = token.children.as_ref().unwrap();
+            let code = children.get(1).unwrap();
+            let code_value = code.value.as_ref().unwrap();
+            let final_code = code_value.split("\"").nth(1).unwrap().to_owned();
+            final_code
+        }
+        _ => {
+            println!("Ignoring Token: {token:?}");
+            "".to_string()
+        }
     }
 }
 

@@ -63,6 +63,7 @@ pub enum TokenIdentifier {
     EqualTo,
     NotEqualTo,
     Comment,
+    Rust,
     TokenType(TokenType),
 }
 #[derive(Debug, PartialEq, Clone)]
