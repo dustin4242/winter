@@ -1,10 +1,10 @@
-const automataLength = 55
+const automataLength = 110
 
 // Fill an array with dead cells
 let initArray = [" "]
 
 let i = 0
-while(i != automataLength - 1)
+while(i != automataLength / 2 - 1)
 	push(initArray, " ")
 	i = i + 1
 end
@@ -16,7 +16,7 @@ while(i != automataLength)
 end
 
 let x = 0
-while(x != automataLength * 2)
+while(x != automataLength)
 	print(initArray[x])
 	x = x + 1
 end
@@ -24,7 +24,7 @@ print("\n")
 
 // Height
 i = 0
-while(i != automataLength - 1)
+while(i != automataLength / 2 - 1)
 	let newArray = [" "]
 	// Width
 	let pos = 0
@@ -42,7 +42,7 @@ while(i != automataLength - 1)
 	push(newArray, " ")
 	initArray = newArray
 	let x = 0
-	while(x != automataLength * 2)
+	while(x != automataLength)
 		print(initArray[x])
 		x = x + 1
 	end
