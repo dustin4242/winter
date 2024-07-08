@@ -2,22 +2,21 @@
 
 I am currently working on winter however to get it up to speed on SusCoding I am going to need to do these things on the to-do list:
 
--   [x] Add Let
--   [x] Add Const
--   [x] Add Double Assignment
--   [x] Add If
-    -   [x] Add Elif Statement
-    -   [x] Add Else Statement
--   [x] Add Function
-    -   [x] Passing Variables Into Functions
--   [x] Add Int Numbers
-    -   [x] Add Arithmetic Sequences
-    -   [x] Add Subtraction, Multiplying, And Division
-bugfix:
-    -   [x] Add Arrays
-        -   [x] Add Indexing Arrays
-        -   [ ] Add Array To Types
--   [x] Add Comments
--   [x] Add Not Equal
--   [x] Add While Loop
+-   [ ] Add Let
+-   [ ] Add Const
+-   [ ] Add Double Assignment
+-   [ ] Add If
+    -   [ ] Add Elif Statement
+    -   [ ] Add Else Statement
+-   [ ] Add Function
+    -   [ ] Passing Variables Into Functions
+-   [ ] Add Int Numbers
+    -   [ ] Add Arithmetic Sequences
+    -   [ ] Add Subtraction, Multiplying, And Division
+-   [ ] Add Arrays
+    -   [ ] Add Indexing Arrays
+    -   [ ] Add Array To Types
+-   [ ] Add Comments
+-   [ ] Add Not Equal
+-   [ ] Add While Loop
 
