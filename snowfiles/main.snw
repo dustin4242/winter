@@ -1,31 +1,4 @@
 //Example Comment
-function a(b: i32): string
-	let hello = "hello"
-	let a = [hello]
-	let y = 1
-	let x = 0
-	while(x != y * 2 - 1)
-		if(b == 1)
-			a[0] = "hello2"
-			x = x + 1
-		elif(b != 2)
-			a[0] = hello + " world"
-			a[x] = a[0] + a[0]
-			x = x + 1
-		else
-		//Empty
-			x = x + 1
-		end
-	end
-	return a[0]
-end
-
-rust("std::thread::sleep(std::time::Duration::from_millis(1000));")
-
-println(a(0))
-println(a(1))
-println(a(2))
-
-function println(input: string)
-	write("/dev/stdout", input + "\n")
-end
+let hello = 0 + 0
+let examplestring = "string"
+let something =
