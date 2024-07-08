@@ -5,7 +5,7 @@ I am currently working on winter however to get up to speed with SusCoding I am 
 Base:
 - [x] Add File Reading
 - [x] Add Lexical Analysis
-- [ ] Add Artemis Error Checking
+- [x] Add Artemis Error Checking
 - [ ] Add Code Execution
 
 Lexing:
