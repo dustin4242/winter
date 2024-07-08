@@ -1,5 +1,6 @@
 # Winter To-do List
 
+I am not sure how many rewrite I've done but here we go again.
 I am currently working on winter however to get up to speed with SusCoding I am going to need to do these things on the to-do list:
 
 Base:
