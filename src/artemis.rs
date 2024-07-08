@@ -59,9 +59,13 @@ fn error_check(
             } else {
                 panic!("Unexpected Token After Operator: {next_token:?} On Line {current_line}")
             };
-            let prev_token_type = match prev_token.as_ref().unwrap() {
-                Token::Word(w) => words.get(w).unwrap(),
-                _ => type_to_string(prev_token.as_ref().unwrap()),
+            let prev_token_type = if let Some(prev_token) = prev_token.as_ref() {
+                match prev_token {
+                    Token::Word(w) => words.get(w).unwrap(),
+                    _ => type_to_string(prev_token),
+                }
+            } else {
+                panic!("Expected Token Before Operator On Line {current_line}");
             };
             if prev_token_type != next_type {
                 panic!(
