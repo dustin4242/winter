@@ -1,6 +1,7 @@
 use std::{env::args, fs};
 
 mod artemis;
+mod interpreter;
 mod lexer;
 
 fn main() {
@@ -8,8 +9,8 @@ fn main() {
     println!("{:?}", file_path);
     let file = read_file(file_path);
     let tokens = lexer::lexer(file);
-    println!("{:?}", tokens);
-    artemis::hunt(tokens);
+    artemis::hunt(&tokens);
+    interpreter::interpret(tokens);
 }
 
 fn read_file(file_path: Option<String>) -> String {

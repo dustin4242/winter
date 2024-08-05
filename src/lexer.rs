@@ -73,9 +73,9 @@ pub fn lexer(file: String) -> Vec<Token> {
                             num.push(next_char.unwrap());
                             next_char = chars.next();
                         }
-                        tokens.push(Token::Float(num));
+                        tokens.push(Token::Float(num.trim().parse().unwrap()));
                     } else {
-                        tokens.push(Token::Number(num));
+                        tokens.push(Token::Number(num.trim().parse().unwrap()));
                     }
                     current_char = next_char;
                     continue;
@@ -102,7 +102,7 @@ fn check_keyword(word: String) -> Token {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Token {
     Newline,
     Comment,
@@ -122,7 +122,7 @@ pub enum Token {
     Write,
     WString(String),
     Word(String),
-    Float(String),
-    Number(String),
+    Float(f32),
+    Number(u32),
     Operator(&'static str),
 }

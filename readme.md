@@ -11,7 +11,6 @@ Base:
 
 Lexing:
 - [x] Add Let
-- [ ] Add Const
 - [ ] Add Double Assignment
 - [x] Add Strings
 - [x] Add Numbers
@@ -30,7 +29,6 @@ Lexing:
 
 Artemis:
 - [x] Add Let
-- [ ] Add Const
 - [ ] Add Double Assignment
 - [x] Add Strings
 - [x] Add Numbers
@@ -49,7 +47,6 @@ Artemis:
 
 Execution:
 - [ ] Add Let
-- [ ] Add Const
 - [ ] Add Double Assignment
 - [ ] Add Strings
 - [ ] Add Numbers
@@ -62,6 +59,6 @@ Execution:
 - [ ] Add Arrays
     - [ ] Add Indexing Arrays
     - [ ] Add Array To Types
-- [ ] Add Comments
+- [x] Add Comments
 - [ ] Add Not Equal
 - [ ] Add While Loop

@@ -1,11 +1,11 @@
 use std::any::Any;
 use std::collections::HashMap;
-use std::vec::IntoIter;
 
 use crate::lexer::Token;
 use crate::lexer::Token::*;
+use std::slice::Iter;
 
-pub fn hunt(tokens: Vec<Token>) {
+pub fn hunt(tokens: &Vec<Token>) {
     let mut token_iter = tokens.into_iter();
     let current_token = token_iter.next();
     let mut words: HashMap<String, String> = HashMap::new();
@@ -13,9 +13,9 @@ pub fn hunt(tokens: Vec<Token>) {
 }
 
 fn error_check(
-    current_token: Token,
-    prev_token: Option<Token>,
-    token_iter: &mut IntoIter<Token>,
+    current_token: &Token,
+    prev_token: Option<&Token>,
+    token_iter: &mut Iter<Token>,
     words: &mut HashMap<String, String>,
     mut current_line: u32,
 ) {
@@ -29,7 +29,7 @@ fn error_check(
                 }
             }
             error_check(
-                next_token,
+                &next_token,
                 Some(current_token),
                 token_iter,
                 words,
@@ -45,7 +45,7 @@ fn error_check(
                 }
             }
             error_check(
-                next_token,
+                &next_token,
                 Some(current_token),
                 token_iter,
                 words,
@@ -75,7 +75,7 @@ fn error_check(
                 )
             }
             error_check(
-                next_token,
+                &next_token,
                 Some(current_token),
                 token_iter,
                 words,
@@ -91,7 +91,7 @@ fn error_check(
                 }
             }
             error_check(
-                next_token,
+                &next_token,
                 Some(current_token),
                 token_iter,
                 words,
@@ -106,12 +106,12 @@ fn error_check(
             };
             let next_type = type_to_string(&next_token).to_owned();
             if next_type != "Unknown" {
-                words.insert(string, next_type);
+                words.insert(string.to_owned(), next_type);
             } else {
                 panic!("Unexpected Token After Assign: {next_token:?} On Line {current_line}")
             }
             error_check(
-                next_token,
+                &next_token,
                 Some(current_token),
                 token_iter,
                 words,
@@ -126,7 +126,7 @@ fn error_check(
             current_line += 1;
             let next_token = get_next(token_iter.next(), &current_token);
             if let Some(n) = next_token {
-                error_check(n, Some(current_token), token_iter, words, current_line)
+                error_check(&n, Some(current_token), token_iter, words, current_line)
             }
         }
         Newline => {
@@ -134,8 +134,8 @@ fn error_check(
             let next_token = get_next(token_iter.next(), &current_token);
             if let Some(n) = next_token {
                 match n {
-                    Let => {
-                        error_check(n, Some(current_token), token_iter, words, current_line);
+                    Write | Let => {
+                        error_check(&n, Some(current_token), token_iter, words, current_line);
                     }
                     _ => {
                         panic!("Unexpected Token After Newline: {n:?} On Line {current_line}")
@@ -143,13 +143,14 @@ fn error_check(
                 }
             }
         }
+        //Write => {}
         _ => {
             todo!("{:?}", current_token)
         }
     }
 }
 
-fn get_next<'a>(next_token: Option<Token>, current: &Token) -> Option<Token> {
+fn get_next<'a>(next_token: Option<&'a Token>, current: &Token) -> Option<&'a Token> {
     if let Some(token) = next_token {
         Some(token)
     } else {
