@@ -1,0 +1,164 @@
+{
+  "main": {
+    "id": "d054638ee0564a16",
+    "type": "split",
+    "children": [
+      {
+        "id": "ccc11c92db840f76",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c2c46c6896ac9eab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "readme.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a55ecc5696c62a41",
+    "type": "split",
+    "children": [
+      {
+        "id": "77f7f886bbd23a57",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "64fe39fe3ccbf834",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "4b88f0062b8778a9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1fbe814f11d5593f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "463e4e8adfee9b3f",
+    "type": "split",
+    "children": [
+      {
+        "id": "6971cb5b877d0f08",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eb7d6e885a0253ec",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "readme.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "1ec17f89dd5eaf4e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "readme.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a4e02511f079b785",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "438aa950950caf7c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "readme.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "obsidian-excalidraw-plugin:Create new drawing": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "c2c46c6896ac9eab",
+  "lastOpenFiles": [
+    "target/debug/incremental/winter-29knri7vfh0ua/s-gyov70x6iv-th4138-4bo9uhi8wvyya30hlaum5yu7o/work-products.bin",
+    "target/debug/incremental/winter-29knri7vfh0ua/s-gyov70x6iv-th4138-4bo9uhi8wvyya30hlaum5yu7o/query-cache.bin",
+    "target/debug/incremental/winter-29knri7vfh0ua/s-gyov70x6iv-th4138-4bo9uhi8wvyya30hlaum5yu7o/dep-graph.bin",
+    "target/debug/incremental/winter-29knri7vfh0ua/s-gyov70x6iv-th4138-4bo9uhi8wvyya30hlaum5yu7o",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-111k37qotv2sht4upmmhv4ovm/work-products.bin",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-111k37qotv2sht4upmmhv4ovm/query-cache.bin",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-111k37qotv2sht4upmmhv4ovm/dep-graph.bin",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-111k37qotv2sht4upmmhv4ovm",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-working/dep-graph.part.bin",
+    "target/debug/incremental/winter-29knri7vfh0ua/s-gyov70x6iv-th4138-working/dep-graph.part.bin",
+    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyov70x6it-1pnbj2k-working/work-products.bin"
+  ]
+}
