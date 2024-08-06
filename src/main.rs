@@ -5,18 +5,18 @@ mod interpreter;
 mod lexer;
 
 fn main() {
-    let file_path = args().nth(1);
-    println!("{:?}", file_path);
-    let file = read_file(file_path);
+    let file_path_argument = args().nth(1);
+    println!("{:?}", file_path_argument);
+    let file = read_file(file_path_argument);
     let tokens = lexer::lexer(file);
     artemis::hunt(&tokens);
     interpreter::interpret(tokens);
 }
 
-fn read_file(file_path: Option<String>) -> String {
-    if let Some(f) = file_path {
-        if fs::read(&f).is_ok() {
-            fs::read_to_string(f).unwrap()
+fn read_file(file_path_argument: Option<String>) -> String {
+    if let Some(file_path) = file_path_argument {
+        if fs::read(&file_path).is_ok() {
+            fs::read_to_string(file_path).unwrap()
         } else {
             panic!("File Provided Is Not On System");
         }

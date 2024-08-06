@@ -29,7 +29,7 @@ pub fn lexer(file: String) -> Vec<Token> {
                 if next_char.unwrap_or('\n') == '\n' {
                     panic!("Missing \" On Line {line}")
                 }
-                tokens.push(Token::WString(string));
+                tokens.push(Token::TString(string));
             }
             '=' => tokens.push(Token::Assign),
             '+' => tokens.push(Token::Operator("Add")),
@@ -104,9 +104,6 @@ fn check_keyword(word: String) -> Token {
 
 #[derive(Debug, Clone)]
 pub enum Token {
-    Newline,
-    Comment,
-    Let,
     Assign,
     OpenParen,
     ClosedParen,
@@ -114,13 +111,16 @@ pub enum Token {
     ClosedBracket,
     Comma,
     Colon,
+    Newline,
+    Comment,
+    Let,
     If,
     Elif,
     Else,
     Function,
     End,
     Write,
-    WString(String),
+    TString(String),
     Word(String),
     Float(f32),
     Number(u32),

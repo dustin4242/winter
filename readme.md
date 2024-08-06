@@ -46,11 +46,11 @@ Artemis:
 - [ ] Add While Loop
 
 Execution:
-- [ ] Add Let
+- [x] Add Let
 - [ ] Add Double Assignment
-- [ ] Add Strings
-- [ ] Add Numbers
-    - [ ] Add Arithmetic Sequences
+- [x] Add Strings
+- [x] Add Numbers
+    - [x] Add Arithmetic Sequences
 - [ ] Add If
     - [ ] Add Elif Statement
     - [ ] Add Else Statement

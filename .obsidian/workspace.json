@@ -18,8 +18,31 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "da168ea203144bd8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "readme.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "56df101ca04f643d",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2024-08-06 04.59.48.excalidraw.md"
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -85,7 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "readme.md",
+                "file": "Excalidraw/Drawing 2024-08-06 04.59.48.excalidraw.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +125,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "readme.md",
+                "file": "Excalidraw/Drawing 2024-08-06 04.59.48.excalidraw.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +148,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "readme.md"
+                "file": "Excalidraw/Drawing 2024-08-06 04.59.48.excalidraw.md"
               }
             }
           }
@@ -147,18 +170,21 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c2c46c6896ac9eab",
+  "active": "56df101ca04f643d",
   "lastOpenFiles": [
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-e6w9rdzsoed07rreopuecu739/work-products.bin",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-e6w9rdzsoed07rreopuecu739/query-cache.bin",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-e6w9rdzsoed07rreopuecu739/dep-graph.bin",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-e6w9rdzsoed07rreopuecu739",
-    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyozg4gtmb-apbic7-7228x99jz3ul015kafffx8y5d/work-products.bin",
-    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyozg4gtmb-apbic7-7228x99jz3ul015kafffx8y5d/query-cache.bin",
-    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyozg4gtmb-apbic7-7228x99jz3ul015kafffx8y5d/dep-graph.bin",
-    "target/debug/incremental/winter-1hd4m0rt5ovd0/s-gyozg4gtmb-apbic7-7228x99jz3ul015kafffx8y5d",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-working/work-products.bin",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-working/query-cache.bin",
-    "target/debug/incremental/winter-29knri7vfh0ua/s-gyozg4gtma-1jdl4sd-working/dep-graph.part.bin"
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/x2psjiwyc6v27fu.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/work-products.bin",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/rex4sta25txlup3.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/query-cache.bin",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/pm9rp5t1koj7gs7.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/ozgafvtyoj1cdhw.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/nbw6be2nw0rps6b.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/kj2yx05o0ahifio.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/hmo5tok8dklzz63.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/fv1vkx0a3s273ut.o",
+    "target/debug/incremental/winter-1r2300k5i1iuh/s-gyqdbg9aey-s3kb46-1xb9nx2uece3td2ciwp1ajm2r/dep-graph.bin",
+    "Excalidraw/Drawing 2024-08-06 03.47.58.excalidraw.md",
+    "readme.md",
+    "Excalidraw/Drawing 2024-08-06 04.59.48.excalidraw.md"
   ]
 }
