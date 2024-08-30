@@ -39,7 +39,7 @@ fn error_check(
             let mut next_token = check_next(token_iter.next(), &current_token).unwrap();
             match next_token {
                 OpenParen => {
-                    if let Some(function) = find_function_value(functions, w.to_owned()) {
+                    if find_function_value(functions, w.to_owned()).is_some() {
                         current_token = next_token;
                         next_token = check_next(token_iter.next(), &current_token).unwrap();
                         if next_token.type_id() == Token::ClosedParen.type_id() {

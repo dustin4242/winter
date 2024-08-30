@@ -3,45 +3,43 @@ use std::{collections::HashMap, ops::AddAssign};
 use crate::lexer::Token;
 
 pub fn interpret(tokens: Vec<Token>) {
-    let mut variables: Vec<HashMap<String, Token>> = Vec::new();
-    variables.push(HashMap::<String, Token>::new());
+    let mut words: Vec<HashMap<String, Token>> = Vec::new();
+    words.push(HashMap::<String, Token>::new());
     let mut token_index = 0;
     while let Some(token) = tokens.get(token_index) {
-        interpret_token(token, tokens.to_owned(), &mut variables, &mut token_index);
+        interpret_token(token, tokens.to_owned(), &mut words, &mut token_index);
         token_index += 1;
     }
-    println!("Scope 0 Variables: {variables:?}");
+    println!("Scope 0 Variables: {words:?}");
 }
 
 fn interpret_token(
     token: &Token,
     tokens: Vec<Token>,
-    variables: &mut Vec<HashMap<String, Token>>,
+    words: &mut Vec<HashMap<String, Token>>,
     token_index: &mut usize,
 ) {
     match token {
         Token::Comment => (),
         Token::Let => {
-            if let Token::Word(variable_name) = tokens.get(*token_index + 1).unwrap() {
+            if let Token::Word(word_name) = tokens.get(*token_index + 1).unwrap() {
                 token_index.add_assign(3);
                 let (unparsed_value, index_increase) =
-                    parse_multiple_token(*token_index, &tokens, variables.to_owned());
+                    parse_multiple_token(*token_index, &tokens, words.to_owned());
                 token_index.add_assign(index_increase);
-                let mut variable_value = unparsed_value.get(0).unwrap().to_owned();
-                match variable_value {
+                let mut word_value = unparsed_value.get(0).unwrap().to_owned();
+                match word_value {
                     Token::TString(_) => {
-                        variable_value =
-                            handle_string_operators(unparsed_value.to_owned(), variables)
+                        word_value = handle_string_operators(unparsed_value.to_owned(), words)
                     }
                     Token::Number(_) => {
-                        variable_value =
-                            handle_number_operators(unparsed_value.to_owned(), variables)
+                        word_value = handle_number_operators(unparsed_value.to_owned(), words)
                     }
                     _ => {}
                 }
-                let scope = variables.len() - 1;
-                let scope_variables = variables.get_mut(scope).unwrap();
-                scope_variables.insert(variable_name.to_owned(), variable_value.to_owned());
+                let scope = words.len() - 1;
+                let scope_variables = words.get_mut(scope).unwrap();
+                scope_variables.insert(word_name.to_owned(), word_value.to_owned());
             }
         }
         Token::Newline => (),
@@ -50,21 +48,20 @@ fn interpret_token(
 }
 
 fn handle_number_operators(
-    variable_value: Vec<Token>,
-    variables: &mut Vec<HashMap<String, Token>>,
+    word_value: Vec<Token>,
+    words: &mut Vec<HashMap<String, Token>>,
 ) -> Token {
-    let mut temp_number = match variable_value.get(0).unwrap() {
+    let mut temp_number = match word_value.get(0).unwrap() {
         Token::Number(a) => a,
         _ => &0,
     }
     .to_owned();
     let mut operator_index = 0;
     loop {
-        if let Some(operator) = variable_value.get(1 + operator_index * 2) {
-            let operator_value = match variable_value.get(2 + operator_index * 2).unwrap() {
+        if let Some(operator) = word_value.get(1 + operator_index * 2) {
+            let operator_value = match word_value.get(2 + operator_index * 2).unwrap() {
                 Token::Number(value) => value,
-                Token::Word(name) => match find_variable_value(variables, name.to_owned()).unwrap()
-                {
+                Token::Word(name) => match find_variable_value(words, name.to_owned()).unwrap() {
                     Token::Number(n) => n,
                     _ => &0,
                 },
@@ -86,21 +83,20 @@ fn handle_number_operators(
 }
 
 fn handle_string_operators(
-    variable_value: Vec<Token>,
-    variables: &mut Vec<HashMap<String, Token>>,
+    word_value: Vec<Token>,
+    words: &mut Vec<HashMap<String, Token>>,
 ) -> Token {
-    let mut temp_string = match variable_value.get(0).unwrap() {
+    let mut temp_string = match word_value.get(0).unwrap() {
         Token::TString(a) => a,
         _ => "",
     }
     .to_owned();
     let mut operator_index = 0;
     loop {
-        if let Some(operator) = variable_value.get(1 + operator_index * 2) {
-            let operator_value = match variable_value.get(2 + operator_index * 2).unwrap() {
+        if let Some(operator) = word_value.get(1 + operator_index * 2) {
+            let operator_value = match word_value.get(2 + operator_index * 2).unwrap() {
                 Token::TString(value) => value,
-                Token::Word(name) => match find_variable_value(variables, name.to_owned()).unwrap()
-                {
+                Token::Word(name) => match find_variable_value(words, name.to_owned()).unwrap() {
                     Token::TString(n) => n,
                     _ => "",
                 },
@@ -119,12 +115,12 @@ fn handle_string_operators(
 }
 
 fn find_variable_value(
-    variables: &mut Vec<HashMap<String, Token>>,
-    variable_name: String,
+    words: &mut Vec<HashMap<String, Token>>,
+    word_name: String,
 ) -> Option<&Token> {
-    for n in 0..variables.len() {
-        let length = variables.len();
-        if let Some(value) = variables.get(length - 1 - n).unwrap().get(&variable_name) {
+    for n in 0..words.len() {
+        let length = words.len();
+        if let Some(value) = words.get(length - 1 - n).unwrap().get(&word_name) {
             return Some(value);
         } else {
             continue;
@@ -136,7 +132,7 @@ fn find_variable_value(
 fn parse_multiple_token(
     current_index: usize,
     tokens: &Vec<Token>,
-    variables: Vec<HashMap<String, Token>>,
+    words: Vec<HashMap<String, Token>>,
 ) -> (Vec<Token>, usize) {
     let mut index_increase = 0;
     let full_token;
