@@ -102,7 +102,8 @@ fn check_keyword(word: String) -> Token {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
+#[allow(dead_code)]
 pub enum Token {
     Assign,
     OpenParen,
