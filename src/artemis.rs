@@ -166,16 +166,17 @@ fn error_check(
         //ClosedBracket => {}
         Comment => {
             current_line += 1;
-            let n = check_next(token_iter.next(), &current_token).unwrap();
-            error_check(
-                &n,
-                Some(current_token),
-                token_iter,
-                words,
-                functions,
-                scope,
-                current_line,
-            )
+            if let Some(n) = check_next(token_iter.next(), &current_token) {
+                error_check(
+                    &n,
+                    Some(current_token),
+                    token_iter,
+                    words,
+                    functions,
+                    scope,
+                    current_line,
+                );
+            }
         }
         Newline => {
             current_line += 1;
