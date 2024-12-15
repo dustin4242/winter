@@ -6,7 +6,6 @@ mod lexer;
 
 fn main() {
     let file_path_argument = args().nth(1);
-    println!("{:?}", file_path_argument);
     let file = read_file(file_path_argument);
     let tokens = lexer::lexer(file);
     artemis::hunt(&tokens);

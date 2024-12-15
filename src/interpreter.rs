@@ -68,13 +68,13 @@ fn interpret_token(
         }
         Token::Word(word_name) => match tokens.get(*token_index + 1).unwrap() {
             Token::OpenParen => {
-                token_index.add_assign(2);
                 let functions_length = functions.len();
                 let function = functions
                     .get_mut(functions_length - 1)
                     .unwrap()
                     .get_mut(word_name)
                     .unwrap();
+                token_index.add_assign(2);
                 let mut token = tokens.get(*token_index).unwrap();
                 let mut variable_index = 0;
                 while token != &Token::ClosedParen {
@@ -98,7 +98,20 @@ fn interpret_token(
                     variable_index += 1;
                     token = tokens.get(*token_index).unwrap();
                 }
-                println!("{:?}", functions);
+                let function_tokens = function.1.to_owned();
+                words.push(HashMap::new());
+                functions.push(HashMap::new());
+                let mut function_token_index = 0;
+                while let Some(token) = function_tokens.to_owned().get(function_token_index) {
+                    interpret_token(
+                        token,
+                        function_tokens.to_owned(),
+                        words,
+                        functions,
+                        &mut function_token_index,
+                    );
+                    function_token_index.add_assign(1);
+                }
             }
             _ => todo!(),
         },
